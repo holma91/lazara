@@ -7,9 +7,29 @@ import { FiExternalLink } from 'react-icons/fi';
 export default function Create() {
   const [collection, setCollection] = useState('random');
   const { register, handleSubmit, watch, formState } = useForm();
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const [progress, setProgress] = useState(0);
+
+  const onSubmit = (prompt: any) => {
+    console.log(prompt);
+    // send request to backend
+    // start some kind of timer
+    const timer = setInterval(() => {
+      setProgress((oldProgress) => {
+        if (oldProgress === 100) {
+          clearInterval(timer);
+          return 0;
+        }
+        return oldProgress + 1;
+        // const diff = Math.random() * 10;
+        // return Math.min(oldProgress + diff, 100);
+      });
+    }, 50);
+    // animate
+    // get image back from the backend
+    // stop timer
+    // show image
   };
+  console.log(progress);
 
   const getImages = (collection: string): string[] => {
     if (collection === 'random') {
@@ -46,7 +66,7 @@ export default function Create() {
           <div
             onClick={() => handleChangeCollection('random')}
             className={
-              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-3xl font-medium cursor-pointer ' +
+              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-3xl font-medium hover:bg-blue-500 hover:text-black cursor-pointer ' +
               (collection === 'random'
                 ? 'bg-blue-500 text-black'
                 : 'bg-slate-800 text-white')
@@ -137,9 +157,23 @@ export default function Create() {
           </button>
         </form>
         <div className="bg-slate-800 flex items-center justify-center rounded-2xl">
-          <p className="py-24 md:py-32 lg:py-48 text-base md:text-xl font-semibold">
-            Ready to generate image!
-          </p>
+          {progress >= 0 ? (
+            <div
+              className={
+                'bg-slate-900 flex items-center justify-center rounded-2xl w-full ' +
+                `translate-x-` +
+                '[10px]'
+              }
+            >
+              <p className="py-24 md:py-32 lg:py-48 text-base md:text-xl font-semibold">
+                {progress}%
+              </p>
+            </div>
+          ) : (
+            <p className="py-24 md:py-32 lg:py-48 text-base md:text-xl font-semibold">
+              Ready to generate image!
+            </p>
+          )}
         </div>
       </div>
       <div className="flex flex-col gap-3 md:gap-6"></div>

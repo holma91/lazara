@@ -11,7 +11,7 @@ export default function Header() {
       : '';
 
   return (
-    <div className="flex justify-between px-8 py-6 bg-black text-white ">
+    <div className="sticky top-0 z-10 flex justify-between px-8 py-6 bg-black text-white ">
       <div className="flex items-center text-2xl">
         <Link href="/">
           <a>SIZZLE</a>
