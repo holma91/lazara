@@ -3,9 +3,19 @@ import { useForm } from 'react-hook-form';
 import { FaHatCowboy, FaFrog, FaRocket, FaTrashAlt } from 'react-icons/fa';
 import { TbWorld } from 'react-icons/tb';
 import { FiExternalLink } from 'react-icons/fi';
+import { MdAddCircle } from 'react-icons/md';
+
+const collectionToColor: { [key: string]: string } = {
+  random: 'blue',
+  pepes: 'green',
+  space: 'purple',
+  walterwhite: 'orange',
+  trash: 'pink',
+};
 
 export default function Create() {
   const [collection, setCollection] = useState('random');
+  const [color, setColor] = useState('blue');
   const { register, handleSubmit, watch, formState } = useForm();
   const [progress, setProgress] = useState(0);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
@@ -60,6 +70,11 @@ export default function Create() {
 
   const handleChangeCollection = (newCollection: string) => {
     setCollection(newCollection);
+    setColor(collectionToColor[newCollection]);
+  };
+
+  const uploadToIpfs = async () => {
+    // do stuff
   };
 
   return (
@@ -70,10 +85,10 @@ export default function Create() {
           <div
             onClick={() => handleChangeCollection('random')}
             className={
-              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-3xl font-medium hover:bg-blue-500 hover:text-black cursor-pointer ' +
+              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-lg font-medium hover:bg-blue-500 hover:text-black cursor-pointer ' +
               (collection === 'random'
                 ? 'bg-blue-500 text-black'
-                : 'bg-slate-800 text-white')
+                : 'bg-zinc-800 text-white')
             }
           >
             <TbWorld />
@@ -82,10 +97,10 @@ export default function Create() {
           <div
             onClick={() => handleChangeCollection('space')}
             className={
-              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-3xl font-medium hover:bg-purple-500 hover:text-black cursor-pointer ' +
+              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-lg font-medium hover:bg-purple-500 hover:text-black cursor-pointer ' +
               (collection === 'space'
                 ? 'bg-purple-500 text-black'
-                : 'bg-slate-800 text-white')
+                : 'bg-zinc-800 text-white')
             }
           >
             <FaRocket />
@@ -94,10 +109,10 @@ export default function Create() {
           <div
             onClick={() => handleChangeCollection('pepes')}
             className={
-              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-3xl font-medium hover:bg-green-500 hover:text-black cursor-pointer ' +
+              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-lg font-medium hover:bg-green-500 hover:text-black cursor-pointer ' +
               (collection === 'pepes'
                 ? 'bg-green-500 text-black'
-                : 'bg-slate-800 text-white')
+                : 'bg-zinc-800 text-white')
             }
           >
             <FaFrog />
@@ -106,10 +121,10 @@ export default function Create() {
           <div
             onClick={() => handleChangeCollection('walterwhite')}
             className={
-              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-3xl font-medium hover:bg-orange-500 hover:text-black cursor-pointer ' +
+              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-lg font-medium hover:bg-orange-500 hover:text-black cursor-pointer ' +
               (collection === 'walterwhite'
                 ? 'bg-orange-500 text-black'
-                : 'bg-slate-800 text-white')
+                : 'bg-zinc-800 text-white')
             }
           >
             <FaHatCowboy /> <p>Walter White</p>
@@ -117,50 +132,66 @@ export default function Create() {
           <div
             onClick={() => handleChangeCollection('trash')}
             className={
-              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-3xl font-medium hover:bg-pink-500 hover:text-black cursor-pointer ' +
+              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-lg font-medium hover:bg-pink-500 hover:text-black cursor-pointer ' +
               (collection === 'trash'
                 ? 'bg-pink-500 text-black'
-                : 'bg-slate-800 text-white')
+                : 'bg-zinc-800 text-white')
             }
           >
             <FaTrashAlt />
             <p>Trash</p>
           </div>
+          <div
+            className={
+              'flex gap-2 items-center py-3 px-5 md:py-4 md:px-6 rounded-lg font-medium hover:bg-indigo-500 hover:text-black cursor-question bg-zinc-800'
+            }
+          >
+            <MdAddCircle />
+            <p>Create Collection</p>
+          </div>
         </div>
-        <div className="mt-3 flex overflow-x-scroll gap-2">
+        <div className="mt-3 flex overflow-x-scroll gap-3">
           {getImages(collection).map((image) => (
             <img
               key={image}
               src={`/generated/${image}`}
               alt="generated image"
-              className="h-24 w-24 lg:h-52 lg:w-52 rounded-xl"
+              className="h-24 w-24 lg:h-52 lg:w-52 rounded-lg"
             ></img>
           ))}
         </div>
-        <div className="flex items-center gap-2 mt-3">
-          <p className="text-base md:text-lg lg:text-2xl md:font-semibold">
+        <div className="flex flex-col justify-center gap-3 mt-6">
+          <p className="flex items-center gap-2 text-base md:text-lg lg:text-2xl md:font-semibold">
             You have chosen the collection:{' '}
-            <span className="text-green-500 font-semibold md:font-bold">
+            <span className={`font-semibold md:font-bold text-green-500`}>
               {collection}
             </span>
+            <FiExternalLink className="text-green-500 lg:h-5 lg:w-5" />
           </p>
-          <FiExternalLink className="text-green-500 lg:h-5 lg:w-5" />
+          <p className="text-lg 2xl:text-xl">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
+            nobis molestiae nihil totam cum natus, nostrum sit rerum
+            voluptatibus fugit quos doloribus reiciendis dicta veritatis odio
+            sunt debitis porro voluptate. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Obcaecati nobis molestiae nihil totam cum natus,
+            nostrum sit rerum voluptatibus fugit quos doloribus reiciendis dicta
+            veritatis odio sunt debitis porro voluptate.
+          </p>
         </div>
       </div>
       <div className="flex flex-col gap-3 md:gap-6">
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            className="bg-slate-800 lg:text-lg font-semibold px-4 py-3 w-3/6 md:w-4/6 lg:w-4/5 rounded-l-2xl outline-none mb-2"
+            className="bg-zinc-800 lg:text-lg font-semibold px-4 py-3 w-3/6 md:w-4/6 lg:w-4/5 rounded-l-lg outline-none mb-2"
             {...register('prompt', { required: true })}
           />
           <button
             type="submit"
-            className="bg-green-500 text-black lg:text-lg font-semibold px-4 py-3 w-3/6 md:w-2/6 lg:w-1/5 rounded-r-2xl outline-none"
+            className="bg-green-500 text-black lg:text-lg font-semibold px-4 py-3 w-3/6 md:w-2/6 lg:w-1/5 rounded-r-lg outline-none"
           >
             Generate image
           </button>
         </form>
-        {/* <div className="bg-slate-800 flex items-center justify-center rounded-2xl w-full"> */}
         {progress > 0 ? (
           <p className="text-center py-4 text-base md:text-xl font-semibold">
             {progress}%
@@ -174,7 +205,7 @@ export default function Create() {
                 src={`/generated/${image}`}
                 alt="generated image"
                 className={
-                  'h-full w-full rounded-xl cursor-pointer ' +
+                  'h-full w-full rounded-lg cursor-pointer ' +
                   (chosenImage === i ? `border-4 border-green-500` : '')
                 }
               ></img>
@@ -185,35 +216,43 @@ export default function Create() {
             Ready to generate image!
           </p>
         )}
-        {/* </div> h-24 w-24 md:h-42 md:w-42  */}
       </div>
       {generatedImages.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 mt-4 border-4 rounded-t-2xl border-green-500 p-12">
-          <div className="flex flex-col gap-6 mt-16">
-            <h1 className="text-4xl font-bold">1. Upload Metadata to IPFS</h1>
-            <div className="flex flex-col gap-2">
-              <p className="text-xl font-semibold">Name: Walter White #44</p>
-              <p className="text-xl font-semibold">
-                Description: Walter White in the woods
-              </p>
-              <p className="flex gap-1 items-center text-xl font-semibold">
-                Image: ipfs://dahsjfhasdfklhasfjdhsdhfdsklhf{' '}
-                <FiExternalLink className="text-green-500 lg:h-5 lg:w-5" />
-              </p>
-              <p className="text-xl font-semibold">
-                Generated by: Stable Diffusion
-              </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 border-4 rounded-t-xl border-green-500 p-12">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 mt-12 w-5/6">
+              <h1 className="text-4xl 3xl:text-5xl font-bold">
+                1. Upload Metadata to IPFS
+              </h1>
+              <div className="flex flex-col gap-2 3xl:gap-3 font-medium text-xl 3xl:text-3xl">
+                <p>Name: Walter White #44</p>
+                <p>Description: Walter White in the woods</p>
+                <p className="flex gap-1 items-center">
+                  Image: ipfs://dahsjfhasdfklhasfjdhsdhfdsklhf{' '}
+                  <FiExternalLink className="text-green-500 lg:h-5 lg:w-5" />
+                </p>
+
+                <p className="flex gap-1 items-center">
+                  Generated by: Stable Diffusion{' '}
+                  <FiExternalLink className="text-green-500 lg:h-5 lg:w-5" />
+                </p>
+              </div>
+              <button
+                onClick={uploadToIpfs}
+                className="border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-black rounded-lg py-3 px-4 font-semibold"
+              >
+                Upload to IPFS
+              </button>
             </div>
-            <button className="bg-green-500 text-black rounded-lg py-3 px-4 font-semibold w-3/4">
-              Upload to IPFS
-            </button>
-            <h1 className="text-4xl font-bold">2. Mint NFT</h1>
+            <h1 className="text-4xl 2xl:text-5xl font-bold mt-2">
+              2. Mint NFT
+            </h1>
           </div>
-          <div>
+          <div className="hidden lg:block">
             <img
               src={`/generated/${generatedImages[chosenImage]}`}
               alt="generated image"
-              className="w-full rounded-xl cursor-pointer"
+              className="w-full rounded-lg cursor-pointer"
             ></img>
           </div>
         </div>
