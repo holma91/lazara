@@ -3,11 +3,13 @@ import { useForm } from 'react-hook-form';
 import { FaHatCowboy, FaFrog, FaRocket, FaTrashAlt } from 'react-icons/fa';
 import { TbWorld } from 'react-icons/tb';
 import { FiExternalLink } from 'react-icons/fi';
+import { FaDog } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
 import Select from 'react-select';
 
 const valueToCollection: { [key: string]: string } = {
   random: 'The Random Collection',
+  dogs: 'The Dog Collection',
   space: 'The Space Collection',
   walterwhite: 'The Walter White Collection',
   pepes: 'The Pepe Collection',
@@ -48,6 +50,15 @@ export const collectionOptions = [
       <div className="flex gap-2 items-center p-3">
         <TbWorld />
         <span>The Random Collection</span>
+      </div>
+    ),
+  },
+  {
+    value: 'dogs',
+    label: (
+      <div className="flex gap-2 items-center p-3">
+        <FaDog />
+        <span>The Dog Collection</span>
       </div>
     ),
   },
@@ -136,21 +147,42 @@ const customStyles = {
 const getImages = (collection: string): string[] => {
   if (collection === 'random') {
     return [
-      'img1.png',
-      'img2.png',
-      'img3.png',
-      'img4.png',
-      'space1.png',
-      'space2.png',
-      'space3.png',
-      'space4.png',
+      'generated/img1.png',
+      'generated/img2.png',
+      'generated/img3.png',
+      'generated/img4.png',
+      'generated/space1.png',
+      'generated/space2.png',
+      'generated/space3.png',
+      'generated/space4.png',
     ];
+  } else if (collection === 'dogs') {
+    const imgs = [];
+    for (let i = 1; i < 12; i++) {
+      imgs[i] = `dogs/${i}.png`;
+    }
+    return imgs;
   } else if (collection === 'space') {
-    return ['space1.png', 'space2.png', 'space3.png', 'space4.png'];
+    return [
+      'generated/space1.png',
+      'generated/space2.png',
+      'generated/space3.png',
+      'generated/space4.png',
+    ];
   } else if (collection === 'pepes') {
-    return ['pepe1.png', 'pepe2.png', 'pepe3.png', 'pepe4.png'];
+    return [
+      'generated/pepe1.png',
+      'generated/pepe2.png',
+      'generated/pepe3.png',
+      'generated/pepe4.png',
+    ];
   } else if (collection === 'walterwhite') {
-    return ['wwwoods.png', 'wwwoods2.png', 'wwwoods3.png', 'wwwoods4.png'];
+    return [
+      'generated/wwwoods.png',
+      'generated/wwwoods2.png',
+      'generated/wwwoods3.png',
+      'generated/wwwoods4.png',
+    ];
   }
 
   return [];
@@ -186,6 +218,7 @@ export default function Create() {
   };
 
   const handleChangeCollection = (selectedOption: any) => {
+    setGeneratedImage('');
     setCollection(selectedOption.value);
   };
 
@@ -214,7 +247,7 @@ export default function Create() {
         {getImages(collection).map((image) => (
           <img
             key={image}
-            src={`/generated/${image}`}
+            src={`/${image}`}
             alt="generated image"
             className="h-40 w-40 lg:h-52 lg:w-52 rounded-lg"
           ></img>

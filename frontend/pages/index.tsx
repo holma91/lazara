@@ -2,22 +2,28 @@ import Link from 'next/link';
 
 export default function Home() {
   const images = [
-    'space3.png',
-    'space4.png',
-    'wwwoods2.png',
-    'pepe3.png',
-    'pepe4.png',
-    'wwwoods3.png',
-    'img1.png',
-    'wwwoods4.png',
-    'img2.png',
-    'space1.png',
-    'space2.png',
-    'img3.png',
-    'img4.png',
-    'pepe1.png',
-    'pepe2.png',
-    'wwwoods.png',
+    'dogs/1.png',
+    'dogs/2.png',
+    'generated/space1.png',
+    'generated/space4.png',
+    'dogs/3.png',
+    'generated/wwwoods2.png',
+    'generated/pepe3.png',
+    'generated/pepe4.png',
+    'dogs/4.png',
+    'generated/wwwoods3.png',
+    'dogs/5.png',
+    'generated/img1.png',
+    'generated/wwwoods4.png',
+    'dogs/6.png',
+    'generated/img2.png',
+    'generated/space3.png',
+    'generated/space2.png',
+    'generated/img3.png',
+    'generated/img4.png',
+    'generated/pepe1.png',
+    'generated/pepe2.png',
+    'generated/wwwoods.png',
   ];
   return (
     <div className="flex flex-col items-center py-8 md:py-20 bg-black text-white">
@@ -44,7 +50,7 @@ export default function Home() {
         {images.map((image) => (
           <img
             key={image}
-            src={`/generated/${image}`}
+            src={`/${image}`}
             alt="generated image"
             className="h-32 w-32 md:h-52 md:w-52 rounded-lg"
           ></img>
