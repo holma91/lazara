@@ -11,35 +11,39 @@ export default function Header() {
       : '';
 
   return (
-    <div className="sticky top-0 z-10 flex justify-between px-8 py-6 bg-black text-white ">
-      <div className="flex items-center text-2xl">
-        <Link href="/">
-          <a>SIZZLE</a>
-        </Link>
-      </div>
-      <div className="flex items-center gap-4 md:gap-8 text-lg">
-        <Link href="/create">
-          <a
-            className={
-              page === 'create'
-                ? 'border-b-4 border-green-500'
-                : 'border-b-4 border-black'
-            }
-          >
-            CREATE
-          </a>
-        </Link>
-        <Link href="gallery">
-          <a
-            className={
-              page === 'gallery'
-                ? 'border-b-4 border-green-500'
-                : 'border-b-4 border-black'
-            }
-          >
-            GALLERY
-          </a>
-        </Link>
+    <div className="sticky top-0 z-10 bg-black flex justify-center">
+      <div className="justify-self-center flex justify-between items-center px-6 sm:px-12 py-6 bg-black text-white	w-full max-w-screen-xl">
+        <div className="flex items-center text-2xl">
+          <Link href="/">
+            <a>
+              SI<span className="text-green-400">ZZ</span>LE
+            </a>
+          </Link>
+        </div>
+        <div className="flex items-center gap-4 md:gap-8 text-lg">
+          <Link href="/create">
+            <a
+              className={
+                page === 'create'
+                  ? 'border-b-4 border-green-400'
+                  : 'border-b-4 border-black'
+              }
+            >
+              Create
+            </a>
+          </Link>
+          <Link href="gallery">
+            <a
+              className={
+                page === 'gallery'
+                  ? 'border-b-4 border-green-400'
+                  : 'border-b-4 border-black'
+              }
+            >
+              Gallery
+            </a>
+          </Link>
+        </div>
       </div>
     </div>
   );
