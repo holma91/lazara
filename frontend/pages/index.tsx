@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
   const images = [
     'space3.png',
@@ -29,7 +31,9 @@ export default function Home() {
         </p>
         <div className="flex gap-3 sm:gap-5 mt-2 text-sm sm:text-base">
           <button className="bg-green-400 text-black font-semibold py-3 px-4 sm:px-8 md:px-12 rounded-lg hover:bg-white">
-            Get Started
+            <Link href="/create">
+              <a>Get Started</a>
+            </Link>
           </button>
           <button className="border-2 border-white-500 text-white-500 font-semibold py-3 px-4 sm:px-8 md:px-12 rounded-lg hover:bg-white hover:text-black">
             View Gallery
