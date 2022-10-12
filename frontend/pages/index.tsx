@@ -36,11 +36,11 @@ export default function Home() {
           models, such as DALL-E 2, Imagen and Stable Diffusion.
         </p>
         <div className="flex gap-3 sm:gap-5 mt-2 text-sm sm:text-base">
-          <button className="bg-green-400 text-black font-semibold py-3 px-4 sm:px-8 md:px-12 rounded-lg hover:bg-white">
-            <Link href="/create">
+          <Link href="/create">
+            <button className="bg-green-400 text-black font-semibold py-3 px-4 sm:px-8 md:px-12 rounded-lg hover:bg-white">
               <a>Get Started</a>
-            </Link>
-          </button>
+            </button>
+          </Link>
           <button className="border-2 border-white-500 text-white-500 font-semibold py-3 px-4 sm:px-8 md:px-12 rounded-lg hover:bg-white hover:text-black">
             View Gallery
           </button>

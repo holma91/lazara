@@ -6,6 +6,7 @@ import { FiExternalLink } from 'react-icons/fi';
 import { FaDog } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
 import Select from 'react-select';
+import collections from '../collections.json';
 
 const valueToCollection: { [key: string]: string } = {
   random: 'The Random Collection',
@@ -26,7 +27,7 @@ export const modelOptions = [
     ),
   },
   {
-    value: 'dalle-2',
+    value: 'dall-e-2',
     label: (
       <div className="p-3">
         <span>DALL-E 2</span>
@@ -191,30 +192,77 @@ const getImages = (collection: string): string[] => {
 export default function Create() {
   const [collection, setCollection] = useState('random');
   const [model, setModel] = useState('stable-diffusion');
-  const { register, handleSubmit, watch, formState } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
   const [progress, setProgress] = useState(0);
   const [generatedImage, setGeneratedImage] = useState('');
 
-  const onSubmit = (prompt: any) => {
+  const onSubmit = async ({ prompt }: any) => {
+    if (prompt === 'test') {
+      // setError('words', { type: 'custom', message: 'custom message' });
+      setGeneratedImage('/generated/space1.png');
+      return;
+    }
+
+    const valid = validatePrompt(prompt, collection, model);
+    if (!valid) return;
+
     setGeneratedImage('');
-    console.log(prompt);
+
+    let result = { image: '', error: '' };
 
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
+        if (oldProgress === 80) {
+          if (result.image === '') {
+            let progresses = [50, 60, 70];
+            oldProgress = progresses[Math.floor(Math.random() * 3)];
+          }
+        }
         if (oldProgress === 100) {
           clearInterval(timer);
           return 0;
         }
         return oldProgress + 1;
-        // const diff = Math.random() * 10;
-        // return Math.min(oldProgress + diff, 100);
       });
     }, 50);
 
-    // setTimeout is to prevent a UI bug
-    setTimeout(() => {
-      setGeneratedImage('space1.png');
-    }, 50);
+    console.log(prompt, collection, model);
+
+    try {
+      const response = await fetch('http://localhost:8000/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          prompt,
+        }),
+      });
+      result = await response.json();
+    } catch (e) {
+      console.log(e);
+    }
+
+    console.log(result);
+    setGeneratedImage(result.image);
+  };
+
+  const validatePrompt = (
+    prompt: string,
+    collection: string,
+    model: string
+  ) => {
+    if (collection === 'dogs' || collection === 'space') {
+      let collection_: { [key: string]: any } = collections[collection];
+      // check if the prompt adheres to the rules
+    }
+    return true;
   };
 
   const handleChangeCollection = (selectedOption: any) => {
@@ -239,7 +287,6 @@ export default function Create() {
           options={collectionOptions}
           styles={customStyles}
           onChange={handleChangeCollection}
-          instanceId="yo"
           autoFocus={true}
         />
       </div>
@@ -274,8 +321,6 @@ export default function Create() {
           options={modelOptions}
           styles={customStyles}
           onChange={handleChangeModel}
-          instanceId="yo"
-          autoFocus={true}
         />
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
@@ -289,6 +334,14 @@ export default function Create() {
           >
             Generate
           </button>
+          {errors.prompt && (
+            <span className="px-2 text-red-400">This field is required</span>
+          )}
+          {errors.words && (
+            <span className="px-2 text-red-400">
+              Prompt needs to include atleast 1 words from the rules
+            </span>
+          )}
         </form>
         {(generatedImage === '' || progress !== 0) && (
           <div>
@@ -309,18 +362,18 @@ export default function Create() {
           <div className="grid grid-cols-2 gap-12 mt-3">
             <div className="flex flex-col gap-4">
               <img
-                src={`/generated/${generatedImage}`}
+                src={`${generatedImage}`}
                 alt="generated image"
                 className=" rounded-lg"
               ></img>
               <div className="grid grid-cols-2 gap-4 font-semibold">
                 <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
                   <p className="text-sm">Model</p>
-                  <p>Stable Diffusion</p>
+                  <p className="text-sm">Stable Diffusion</p>
                 </div>
                 <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
                   <p className="text-sm">Creator</p>
-                  <p>0xdeadbeef...1337</p>
+                  <p className="text-sm">0xdeadbeef...1337</p>
                 </div>
               </div>
             </div>
@@ -346,11 +399,11 @@ export default function Create() {
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="font-semibold text-lg">Minted</p>
-                  <p className="text-lg text-gray-400">Feb 6, 2022</p>
+                  <p className="text-lg text-gray-400">Not minted yet</p>
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="font-semibold text-lg">Owned by</p>
-                  <p className="text-lg text-gray-400">0xdeadbeef...1337</p>
+                  <p className="text-lg text-gray-400">No one</p>
                 </div>
               </div>
               <button
