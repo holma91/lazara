@@ -1,10 +1,18 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaHatCowboy, FaFrog, FaRocket, FaTrashAlt } from 'react-icons/fa';
+import {
+  FaHatCowboy,
+  FaFrog,
+  FaRocket,
+  FaTrashAlt,
+  FaChevronDown,
+  FaChevronUp,
+} from 'react-icons/fa';
 import { TbWorld } from 'react-icons/tb';
 import { FiExternalLink } from 'react-icons/fi';
 import { FaDog } from 'react-icons/fa';
 import { MdAddCircle } from 'react-icons/md';
+import { BsFillCheckCircleFill } from 'react-icons/bs';
 import Select from 'react-select';
 import collections from '../collections.json';
 
@@ -200,6 +208,7 @@ export default function Create() {
   } = useForm();
   const [progress, setProgress] = useState(0);
   const [generatedImage, setGeneratedImage] = useState('');
+  const [viewRules, setViewRules] = useState(false);
 
   const onSubmit = async ({ prompt }: any) => {
     if (prompt === 'test') {
@@ -259,7 +268,7 @@ export default function Create() {
     model: string
   ) => {
     if (collection === 'dogs' || collection === 'space') {
-      let collection_: { [key: string]: any } = collections[collection];
+      let collection_ = collections[collection];
       // check if the prompt adheres to the rules
     }
     return true;
@@ -302,8 +311,9 @@ export default function Create() {
       </div>
       <div className="w-3/4 lg:w-[48rem] flex flex-col gap-4">
         <div className="flex flex-col gap-2 md:gap-4 items-center mb-3">
-          <h1 className="text-2xl md:text-3xl text-center">
-            {valueToCollection[collection]}
+          <h1 className="text-2xl md:text-3xl text-center flex gap-4 items-center">
+            {valueToCollection[collection]}{' '}
+            <BsFillCheckCircleFill className="h-7 w-7 mt-1 text-green-400" />
           </h1>
           <p className="text-center w-full md:w-5/6 text-sm md:text-base">
             Stable Diffusion is a state of the art text-to-image model that
@@ -311,6 +321,33 @@ export default function Create() {
             API access you can try DreamStudio Beta. This is a collection of
             random generated images!
           </p>
+          <div className="flex flex-col gap-2 border-4 border-zinc-800 w-full md:w-5/6 rounded-lg">
+            <p
+              onClick={() => setViewRules(!viewRules)}
+              className="flex justify-between items-center px-4 py-3 font-semibold cursor-pointer"
+            >
+              Collection Rules
+              {viewRules ? <FaChevronDown /> : <FaChevronUp />}
+            </p>
+            {viewRules && (
+              <div className="flex flex-col gap-2 py-2 px-5 mb-2">
+                <p className="text-lg font-semibold">
+                  The prompt needs to contain atleast one of the following
+                  words:
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {collections.dogs.rules.map((word) => (
+                    <p
+                      key={word}
+                      className="py-2 px-4 bg-zinc-800 rounded-lg hover:bg-green-400 hover:text-black cursor-pointer"
+                    >
+                      {word}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <Select
           className="w-full"
