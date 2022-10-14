@@ -292,7 +292,7 @@ export default function Mint() {
             {collections[collection].name}{' '}
             <BsFillCheckCircleFill className="h-7 w-7 mt-1 text-green-400" />
           </h1>
-          <p className="text-center w-full md:w-5/6 text-sm md:text-base">
+          <p className="text-center text-zinc-300 w-full md:w-5/6 text-sm md:text-base">
             Stable Diffusion is a state of the art text-to-image model that
             generates images from text. For faster generation and forthcoming
             API access you can try DreamStudio Beta. This is a collection of
@@ -375,7 +375,7 @@ export default function Mint() {
           </div>
         )}
         {generatedImage !== '' && progress === 0 && (
-          <div className="grid grid-cols-2 gap-12 mt-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-12 mt-3">
             <div className="flex flex-col gap-4">
               <img
                 src={`${generatedImage}`}
@@ -385,11 +385,15 @@ export default function Mint() {
               <div className="grid grid-cols-2 gap-4 font-semibold">
                 <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
                   <p className="text-sm">Model</p>
-                  <p className="text-sm">Stable Diffusion</p>
+                  <p className="text-xs md:text-sm overflow-x-scroll">
+                    Stable Diffusion
+                  </p>
                 </div>
                 <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
                   <p className="text-sm">Creator</p>
-                  <p className="text-sm">0xdeadbeef...1337</p>
+                  <p className="text-xs md:text-sm overflow-x-scroll">
+                    0xdead...1337
+                  </p>
                 </div>
               </div>
             </div>

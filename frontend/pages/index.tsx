@@ -31,7 +31,7 @@ export default function Home() {
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal  w-3/4 md:w-1/2 text-center ">
           AI meets Crypto & NFTs. Available for everyone on Near & Aurora today.
         </h1>
-        <p className="text-base sm:text-lg md:text-xl font-light w-10/12 md:w-7/12 text-center">
+        <p className="text-base text-zinc-300 sm:text-lg md:text-xl font-light w-10/12 md:w-7/12 text-center">
           Create collections and generate images with State of the Art diffusion
           models, such as DALL-E 2, Imagen and Stable Diffusion.
         </p>
@@ -52,9 +52,68 @@ export default function Home() {
             key={image}
             src={`/${image}`}
             alt="generated image"
-            className="h-32 w-32 md:h-52 md:w-52 rounded-lg"
+            className="h-32 w-32 md:h-56 md:w-56 rounded-lg"
           ></img>
         ))}
+      </div>
+      <div className="bg-black text-zinc-300 w-full py-4 px-6 mt-16 border-t border-zinc-600 flex justify-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full lg:w-4/6 mt-5">
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-xl md:text-2xl text-zinc-300">Blockchains</p>
+            <p className="text-2xl md:text-3xl font-bold text-green-400">2</p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-xl md:text-2xl text-zinc-300">NFTs minted</p>
+            <p className="text-2xl md:text-3xl font-bold text-green-400">123</p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-xl md:text-2xl text-zinc-300">Collections</p>
+            <p className="text-2xl md:text-3xl font-bold text-green-400">5</p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-xl md:text-2xl text-zinc-300">Models</p>
+            <p className="text-2xl md:text-3xl font-bold text-green-400">2</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="mt-8 grid grid-cols-5 grid-rows-2 gap-1">
+          <img
+            src={`/generated/space1.png`}
+            alt="generated image"
+            className="col-span-2 row-span-2 h-full w-full"
+          ></img>
+          <img
+            src={`/generated/space2.png`}
+            alt="generated image"
+            className="col-span-1 h-full w-full"
+          ></img>
+          <img
+            src={`/generated/space2.png`}
+            alt="generated image"
+            className="col-span-1 h-full w-full"
+          ></img>
+          <img
+            src={`/generated/space2.png`}
+            alt="generated image"
+            className="col-span-1"
+          ></img>
+          <img
+            src={`/generated/space2.png`}
+            alt="generated image"
+            className="col-span-1 h-full w-full"
+          ></img>
+          <img
+            src={`/generated/space2.png`}
+            alt="generated image"
+            className="col-span-1 h-full w-full"
+          ></img>
+          <img
+            src={`/generated/space2.png`}
+            alt="generated image"
+            className="col-span-1 h-full w-full"
+          ></img>
+        </div>
       </div>
     </div>
   );

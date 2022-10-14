@@ -130,7 +130,7 @@ export default function Create() {
   };
 
   return (
-    <div className="flex flex-col gap-4 justify-center items-center">
+    <div className="flex flex-col gap-4 justify-center items-center mb-10">
       <div className="lg:w-[27rem]">
         {generatedImage === '' || progress !== 0 ? (
           <div className="relative bg-zinc-900 rounded-lg w-[27rem] h-[27rem]">
@@ -177,7 +177,7 @@ export default function Create() {
           <div className="grid grid-cols-2 gap-8 mt-3">
             <div className="flex flex-col gap-2">
               <p className="text-xl font-semibold">Name</p>
-              <p>
+              <p className="text-zinc-300">
                 The name of your collection. Examples are TRONBAYC,
                 TronBullClub, etc.{' '}
               </p>
@@ -194,7 +194,7 @@ export default function Create() {
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-xl font-semibold">Symbol</p>
-              <p>
+              <p className="text-zinc-300">
                 The token symbol of your collection. Examples are TBAYC, TBC,
                 etc.
               </p>
@@ -213,7 +213,7 @@ export default function Create() {
           <div className="grid grid-cols-2 gap-8 mt-3">
             <div className="flex flex-col gap-2">
               <p className="text-xl font-semibold">Description</p>
-              <p>
+              <p className="text-zinc-300">
                 The description of your collection. Write in some words what the
                 projects is about.
               </p>
@@ -232,7 +232,7 @@ export default function Create() {
             </div>
             <div className="flex flex-col gap-2">
               <p className="text-xl font-semibold">Website (optional)</p>
-              <p>
+              <p className="text-zinc-300">
                 The website for your collection. Where can people go to find
                 more information?
               </p>
@@ -248,7 +248,7 @@ export default function Create() {
           <div className="gap-8 mt-3">
             <div className="flex flex-col gap-2">
               <p className="text-xl font-semibold">Rules (optional)</p>
-              <p>
+              <p className="text-zinc-300">
                 When your users generate images, you can configure so that the
                 prompt must contain atleast one of the word in a list configured
                 by you. Set the words below (comma separated):
@@ -263,7 +263,9 @@ export default function Create() {
           <div className="grid grid-cols-3 gap-8 mt-3 items-end">
             <div className="col-span-2 flex flex-col gap-2">
               <p className="text-xl font-semibold">Blockchain</p>
-              <p>What blockchain should the collection be on?</p>
+              <p className="text-zinc-300">
+                What blockchain should the collection be on?
+              </p>
               <Select
                 className="w-full mt-1"
                 defaultValue={{
