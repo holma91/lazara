@@ -136,14 +136,14 @@ const getImages = (collection: string): string[] => {
       'dogs/3.png',
       'generated/img3.png',
       'dogs/4.png',
-      'space/img5.png',
+      'space/5.png',
       'space/6.png',
       'space/7.png',
       'space/8.png',
       'space/9.png',
       'dogs/9.png',
       'dogs/10.png',
-      'dogs/1.png',
+      'dogs/11.png',
     ];
   }
 

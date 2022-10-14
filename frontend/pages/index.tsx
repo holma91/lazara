@@ -2,30 +2,6 @@ import Link from 'next/link';
 import { collectionToPromptToImage } from '../promptToImage';
 
 export default function Home() {
-  const images = [
-    'dogs/1.png',
-    'dogs/2.png',
-    'generated/space1.png',
-    'generated/space4.png',
-    'dogs/3.png',
-    'generated/wwwoods2.png',
-    'generated/pepe3.png',
-    'generated/pepe4.png',
-    'dogs/4.png',
-    'generated/wwwoods3.png',
-    'dogs/5.png',
-    'generated/img1.png',
-    'generated/wwwoods4.png',
-    'dogs/6.png',
-    'generated/img2.png',
-    'generated/space3.png',
-    'generated/space2.png',
-    'generated/img3.png',
-    'generated/img4.png',
-    'generated/pepe1.png',
-    'generated/pepe2.png',
-    'generated/wwwoods.png',
-  ];
   return (
     <div className="flex flex-col items-center py-8 md:py-20 bg-black text-white">
       <div className="flex flex-col gap-6 items-center">
@@ -42,9 +18,11 @@ export default function Home() {
               <a>Get Started</a>
             </button>
           </Link>
-          <button className="border-2 border-white-500 text-white-500 font-semibold py-3 px-4 sm:px-8 md:px-12 rounded-lg hover:bg-white hover:text-black">
-            View Gallery
-          </button>
+          <Link href="/gallery">
+            <button className="border-2 border-white-500 text-white-500 font-semibold py-3 px-4 sm:px-8 md:px-12 rounded-lg hover:bg-white hover:text-black">
+              View Gallery
+            </button>
+          </Link>
         </div>
       </div>
       <div className="flex gap-3 overflow-x-scroll mt-8	md:mt-16 mx-6">

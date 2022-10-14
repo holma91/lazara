@@ -30,5 +30,7 @@ export const collectionToPromptToImage: {
     'corgi running on mars, space, detailed': 9,
     'a cream-colored havanese snorkeling in a tropical reef, gopro photo, 4k': 10,
     'dog wearing sunglasses relaxing in a pool floater, cinestill': 11,
+    'Golden labradoodle puppy sky diving and smiling': 12,
+    'cute fluffy golden labrador puppy sitting in grass flower spring landscape detailed painting 4 k': 13,
   },
 };
