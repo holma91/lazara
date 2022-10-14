@@ -129,38 +129,30 @@ const customStyles = {
 const getImages = (collection: string): string[] => {
   if (collection === 'random') {
     return [
-      'generated/img1.png',
-      'generated/img2.png',
+      'dogs/1.png',
+      'space/1.png',
+      'space/2.png',
+      'space/3.png',
+      'dogs/3.png',
       'generated/img3.png',
-      'generated/img4.png',
-      'generated/space1.png',
-      'generated/space2.png',
-      'generated/space3.png',
-      'generated/space4.png',
-    ];
-  } else if (collection === 'dogs') {
-    const imgs = [];
-    for (let i = 1; i < 12; i++) {
-      imgs[i] = `dogs/${i}.png`;
-    }
-    return imgs;
-  } else if (collection === 'space') {
-    return [
-      'generated/space1.png',
-      'generated/space2.png',
-      'generated/space3.png',
-      'generated/space4.png',
-    ];
-  } else if (collection === 'walterwhite') {
-    return [
-      'generated/wwwoods.png',
-      'generated/wwwoods2.png',
-      'generated/wwwoods3.png',
-      'generated/wwwoods4.png',
+      'dogs/4.png',
+      'space/img5.png',
+      'space/6.png',
+      'space/7.png',
+      'space/8.png',
+      'space/9.png',
+      'dogs/9.png',
+      'dogs/10.png',
+      'dogs/1.png',
     ];
   }
 
-  return [];
+  const imgs = [];
+  for (let i = 0; i < 12; i++) {
+    imgs[i] = `${collection}/${i}.png`;
+  }
+
+  return imgs;
 };
 
 export default function Mint() {

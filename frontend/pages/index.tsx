@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { collectionToPromptToImage } from '../promptToImage';
 
 export default function Home() {
   const images = [
@@ -46,17 +47,17 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <div className="flex gap-3 overflow-x-scroll mt-16	md:mt-24 mx-6">
-        {images.map((image) => (
+      <div className="flex gap-3 overflow-x-scroll mt-8	md:mt-16 mx-6">
+        {[...Array(14)].map((_, i) => (
           <img
-            key={image}
-            src={`/${image}`}
+            key={i + 100}
+            src={`space/${i}.png`}
             alt="generated image"
             className="h-32 w-32 md:h-56 md:w-56 rounded-lg"
           ></img>
         ))}
       </div>
-      <div className="bg-black text-zinc-300 w-full py-4 px-6 mt-16 border-t border-zinc-600 flex justify-center">
+      <div className="bg-black text-zinc-300 w-full py-4 px-6 mt-6 mb-4 flex justify-center">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full lg:w-4/6 mt-5">
           <div className="flex flex-col items-center gap-2">
             <p className="text-xl md:text-2xl text-zinc-300">Blockchains</p>
@@ -78,41 +79,40 @@ export default function Home() {
       </div>
       <div>
         <div className="mt-8 grid grid-cols-5 grid-rows-2 gap-1">
-          <img
-            src={`/generated/space1.png`}
-            alt="generated image"
-            className="col-span-2 row-span-2 h-full w-full"
-          ></img>
-          <img
-            src={`/generated/space2.png`}
-            alt="generated image"
-            className="col-span-1 h-full w-full"
-          ></img>
-          <img
-            src={`/generated/space2.png`}
-            alt="generated image"
-            className="col-span-1 h-full w-full"
-          ></img>
-          <img
-            src={`/generated/space2.png`}
-            alt="generated image"
-            className="col-span-1"
-          ></img>
-          <img
-            src={`/generated/space2.png`}
-            alt="generated image"
-            className="col-span-1 h-full w-full"
-          ></img>
-          <img
-            src={`/generated/space2.png`}
-            alt="generated image"
-            className="col-span-1 h-full w-full"
-          ></img>
-          <img
-            src={`/generated/space2.png`}
-            alt="generated image"
-            className="col-span-1 h-full w-full"
-          ></img>
+          {[...Array(14)].map((_, i) => {
+            if (i === 0 || i == 10) {
+              return (
+                <a
+                  key={i}
+                  className="relative col-span-2 row-span-2 h-full w-full cursor-pointer group"
+                >
+                  <img
+                    src={`/space/${i}.png`}
+                    alt="generated image"
+                    className="h-full w-full"
+                  ></img>
+                  <p className="absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
+                    {Object.keys(collectionToPromptToImage['space'])[i]}
+                  </p>
+                </a>
+              );
+            }
+            return (
+              <a
+                key={i}
+                className="relative col-span-1 row-span-1 h-full w-full cursor-pointer group"
+              >
+                <img
+                  src={`/space/${i}.png`}
+                  alt="generated image"
+                  className="h-full w-full"
+                ></img>
+                <p className=" absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
+                  {Object.keys(collectionToPromptToImage['space'])[i]}
+                </p>
+              </a>
+            );
+          })}
         </div>
       </div>
     </div>
