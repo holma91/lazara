@@ -1,9 +1,30 @@
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { collectionToPromptToImage } from '../promptToImage';
 
+const indexToCollection = ['space', 'dogs', 'random'];
+
 export default function Home() {
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  const collection = indexToCollection[carouselIndex];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCarouselIndex((prevIndex) => {
+        console.log(prevIndex);
+        console.log(prevIndex + 1);
+        console.log((prevIndex + 1) % 3);
+
+        return (prevIndex + 1) % 3;
+      });
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="flex flex-col items-center py-8 md:py-20 bg-black text-white">
+    <div className="flex flex-col items-center pt-8 md:pt-16 bg-black text-white overflow-x-hidden">
       <div className="flex flex-col gap-6 items-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal  w-3/4 md:w-1/2 text-center ">
           AI meets Crypto & NFTs. Available for everyone on Near & Aurora today.
@@ -25,17 +46,72 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div className="flex gap-3 overflow-x-scroll mt-8	md:mt-16 mx-6">
-        {[...Array(14)].map((_, i) => (
-          <img
-            key={i + 100}
-            src={`space/${i}.png`}
-            alt="generated image"
-            className="h-32 w-32 md:h-56 md:w-56 rounded-lg"
-          ></img>
+      <div className="grid grid-cols-3 grid-rows-1 overflow-y-hidden md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 gap-3 mt-8 md:mt-12 mx-6">
+        {[...Array(3)].map((_, i) => (
+          <a key={i + 100} className="cursor-pointer">
+            <img
+              src={`${collection}/${i}.png`}
+              alt="generated image"
+              className="rounded-xl"
+            ></img>
+          </a>
         ))}
+        <a className="cursor-pointer hidden md:block">
+          <img
+            src={`${collection}/${4}.png`}
+            alt="generated image"
+            className="rounded-xl"
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden lg:block">
+          <img
+            src={`${collection}/${5}.png`}
+            alt="generated image"
+            className="rounded-xl"
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden 2xl:block">
+          <img
+            src={`${collection}/${6}.png`}
+            alt="generated image"
+            className="rounded-xl"
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden 3xl:block">
+          <img
+            src={`${collection}/${7}.png`}
+            alt="generated image"
+            className="rounded-xl"
+          ></img>
+        </a>
       </div>
-      <div className="bg-black text-zinc-300 w-full py-4 px-6 mt-6 mb-4 flex justify-center">
+      <div className="flex gap-2 items-center mt-6">
+        <div
+          className={
+            'h-3 w-3 rounded-full ' +
+            (carouselIndex === 0
+              ? 'bg-white'
+              : 'bg-black border-2 border-zinc-400')
+          }
+        ></div>
+        <div
+          className={
+            'h-3 w-3 rounded-full ' +
+            (carouselIndex === 1
+              ? 'bg-white'
+              : 'bg-black border-2 border-zinc-400')
+          }
+        ></div>
+        <div
+          className={
+            'h-3 w-3 rounded-full ' +
+            (carouselIndex === 2
+              ? 'bg-white'
+              : 'bg-black border-2 border-zinc-400')
+          }
+        ></div>
+      </div>
+      <div className="bg-black text-zinc-300 w-full py-4 px-6 mt-5 mb-4 flex justify-center">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full lg:w-4/6 mt-5">
           <div className="flex flex-col items-center gap-2">
             <p className="text-xl md:text-2xl text-zinc-300">Blockchains</p>
