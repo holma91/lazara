@@ -163,6 +163,7 @@ export default function Mint() {
     handleSubmit,
     setError,
     clearErrors,
+    watch,
     formState: { errors },
   } = useForm();
   const [progress, setProgress] = useState(0);
@@ -197,9 +198,9 @@ export default function Mint() {
 
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
-        if (oldProgress === 80) {
+        if (oldProgress === 90) {
           if (result.image === '') {
-            let progresses = [50, 60, 70];
+            let progresses = [70, 75, 80];
             oldProgress = progresses[Math.floor(Math.random() * 3)];
           }
         }
@@ -209,7 +210,7 @@ export default function Mint() {
         }
         return oldProgress + 1;
       });
-    }, 50);
+    }, 75);
 
     try {
       const response = await fetch('http://localhost:8000/generate', {
@@ -268,16 +269,71 @@ export default function Mint() {
           autoFocus={true}
         />
       </div>
-      <div className="m-5 md:m-10 flex overflow-x-scroll gap-3">
-        {getImages(collection).map((image) => (
-          <img
-            key={image}
-            src={`/${image}`}
-            alt="generated image"
-            className="h-40 w-40 lg:h-52 lg:w-52 rounded-lg"
-          ></img>
+      {/* <div className="m-5 md:m-10 flex overflow-x-scroll gap-3"> */}
+      <div
+        className="w-full px-4 grid items-center justify-between gap-3 grid-rows-1 overflow-y-hidden 
+      grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 3xl:grid-cols-9 my-5"
+      >
+        {[...Array(3)].map((_, i) => (
+          <a key={i} className="cursor-pointer">
+            <img
+              src={`${collection}/${i}.png`}
+              alt="generated image"
+              className="rounded-xl "
+            ></img>
+          </a>
         ))}
+        <a className="cursor-pointer hidden sm:block">
+          <img
+            src={`${collection}/${3}.png`}
+            alt="generated image"
+            className="rounded-xl "
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden md:block">
+          <img
+            src={`${collection}/${4}.png`}
+            alt="generated image"
+            className="rounded-xl "
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden lg:block">
+          <img
+            src={`${collection}/${5}.png`}
+            alt="generated image"
+            className="rounded-xl "
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden xl:block">
+          <img
+            src={`${collection}/${6}.png`}
+            alt="generated image"
+            className="rounded-xl "
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden 2xl:block">
+          <img
+            src={`${collection}/${7}.png`}
+            alt="generated image"
+            className="rounded-xl "
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden 3xl:block">
+          <img
+            src={`${collection}/${8}.png`}
+            alt="generated image"
+            className="rounded-xl "
+          ></img>
+        </a>
+        <a className="cursor-pointer hidden 3xl:block">
+          <img
+            src={`${collection}/${9}.png`}
+            alt="generated image"
+            className="rounded-xl "
+          ></img>
+        </a>
       </div>
+      {/* className="h-40 w-40 lg:h-52 lg:w-52 rounded-lg" */}
       <div className="w-3/4 lg:w-[48rem] flex flex-col gap-4">
         <div className="flex flex-col gap-2 md:gap-4 items-center mb-3">
           <h1 className="text-2xl md:text-3xl text-center flex gap-4 items-center">
@@ -351,82 +407,76 @@ export default function Mint() {
             </span>
           )}
         </form>
-        {(generatedImage === '' || progress !== 0) && (
-          <div>
-            <div className="relative mb-4 w-full h-64 bg-zinc-900 rounded-lg ">
-              <div
-                className="h-64 bg-zinc-800 rounded-lg"
-                style={{ width: Math.floor(progress) + '%' }}
-              ></div>
-              <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg">
-                {progress === 0
-                  ? 'Ready to generate images!'
-                  : `${Math.floor(progress)}%`}
-              </p>
-            </div>
-          </div>
-        )}
-        {generatedImage !== '' && progress === 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-12 mt-3">
-            <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-12 mt-3">
+          <div className="flex flex-col gap-4">
+            {generatedImage === '' || progress !== 0 ? (
+              <div className="relative mb-4 w-full h-64 md:h-80 bg-zinc-900 rounded-lg ">
+                <div
+                  className="h-64 md:h-80 bg-zinc-800 rounded-lg"
+                  style={{ width: Math.floor(progress) + '%' }}
+                ></div>
+                <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg">
+                  {progress === 0 ? 'Ready!' : `${Math.floor(progress)}%`}
+                </p>
+              </div>
+            ) : (
               <img
                 src={`${generatedImage}`}
                 alt="generated image"
-                className=" rounded-lg"
+                className="h-64 md:h-80 rounded-lg"
               ></img>
-              <div className="grid grid-cols-2 gap-4 font-semibold">
-                <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
-                  <p className="text-sm">Model</p>
-                  <p className="text-xs md:text-sm overflow-x-scroll">
-                    Stable Diffusion
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
-                  <p className="text-sm">Creator</p>
-                  <p className="text-xs md:text-sm overflow-x-scroll">
-                    0xdead...1337
-                  </p>
-                </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-4 font-semibold">
+              <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
+                <p className="text-sm">Model</p>
+                <p className="text-xs md:text-sm overflow-x-scroll">
+                  Stable Diffusion
+                </p>
               </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <h1 className="text-2xl font-semibold mt-5">{collection} #324</h1>
-              <p className="text-lg">{generatedPrompt}</p>
-              <p className="text-xl font-semibold mt-2">Collection</p>
-              <div className="flex items-center gap-5">
-                <img
-                  src={collections[collection].image}
-                  alt="generated image"
-                  className="h-12 w-12 rounded-md"
-                ></img>
-                <p>{collections[collection].name}</p>
+              <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
+                <p className="text-sm">Creator</p>
+                <p className="text-xs md:text-sm overflow-x-scroll">
+                  0xdead...1337
+                </p>
               </div>
-              <p className="font-semibold text-xl mt-3">Details</p>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <p className="font-semibold text-lg">Royalties</p>
-                  <p className="text-lg text-gray-400">
-                    5% goes to the creator
-                  </p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="font-semibold text-lg">Minted</p>
-                  <p className="text-lg text-gray-400">Not minted yet</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="font-semibold text-lg">Owned by</p>
-                  <p className="text-lg text-gray-400">No one</p>
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="mt-4 bg-green-400 text-black font-semibold px-4 py-3 rounded-md outline-none hover:bg-white"
-              >
-                Mint NFT
-              </button>
             </div>
           </div>
-        )}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-2xl font-semibold mt-5">{collection} #324</h1>
+            <p className="text-lg">{watch('prompt')}</p>
+            <p className="text-xl font-semibold mt-2">Collection</p>
+            <div className="flex items-center gap-5">
+              <img
+                src={collections[collection].image}
+                alt="generated image"
+                className="h-12 w-12 rounded-md"
+              ></img>
+              <p>{collections[collection].name}</p>
+            </div>
+            <p className="font-semibold text-xl mt-3">Details</p>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <p className="font-semibold text-lg">Royalties</p>
+                <p className="text-lg text-gray-400">5% goes to the creator</p>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="font-semibold text-lg">Minted</p>
+                <p className="text-lg text-gray-400">Not minted yet</p>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="font-semibold text-lg">Owned by</p>
+                <p className="text-lg text-gray-400">No one</p>
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="mt-4 bg-green-400 text-black font-semibold px-4 py-3 rounded-md outline-none hover:bg-white"
+            >
+              Mint NFT
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
