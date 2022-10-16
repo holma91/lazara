@@ -20,3 +20,16 @@ Collection:
   - image
   - rules:
     - word list
+
+
+
+
+
+next week
+  - finish lazara
+  need to:
+  - integrate ERC20 with frontend
+  - integrate with ape
+  - error handling for image generation
+  - integrate DALL-E
+  - deploy
