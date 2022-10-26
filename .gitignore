@@ -4,3 +4,5 @@ env
 next.config.js
 .DS_Store
 __pycache__
+discourse.js
+discourseHtmlDump.js

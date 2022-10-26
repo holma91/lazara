@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   FaHatCowboy,
@@ -15,6 +15,7 @@ import { MdAddCircle } from 'react-icons/md';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import Select from 'react-select';
 import { collections } from '../data/collections';
+import { NetworkContext } from '../pages/_app';
 
 export const modelOptions = [
   {
@@ -45,7 +46,7 @@ export const modelOptions = [
 
 export const collectionOptions = [
   {
-    value: 'random',
+    value: 'the-random-collection',
     label: (
       <div className="flex gap-2 items-center p-3">
         <TbWorld />
@@ -54,7 +55,7 @@ export const collectionOptions = [
     ),
   },
   {
-    value: 'dogs',
+    value: 'the-dog-collection',
     label: (
       <div className="flex gap-2 items-center p-3">
         <FaDog />
@@ -63,7 +64,7 @@ export const collectionOptions = [
     ),
   },
   {
-    value: 'space',
+    value: 'the-space-collection',
     label: (
       <div className="flex gap-2 items-center p-3">
         <FaRocket />
@@ -72,7 +73,7 @@ export const collectionOptions = [
     ),
   },
   {
-    value: 'walterwhite',
+    value: 'the-walter-white-collection',
     label: (
       <div className="flex gap-2 items-center p-3">
         <FaHatCowboy />
@@ -127,7 +128,7 @@ const customStyles = {
 };
 
 const getImages = (collection: string): string[] => {
-  if (collection === 'random') {
+  if (collection === 'the-random-collection') {
     return [
       'dogs/1.png',
       'space/1.png',
@@ -156,7 +157,8 @@ const getImages = (collection: string): string[] => {
 };
 
 export default function Mint() {
-  const [collection, setCollection] = useState('random');
+  const network = useContext(NetworkContext);
+  const [collection, setCollection] = useState('the-random-collection');
   const [model, setModel] = useState('stable-diffusion');
   const {
     register,
@@ -238,7 +240,7 @@ export default function Mint() {
     collection: string,
     model: string
   ) => {
-    let rules = collections[collection].rules;
+    let rules = collections[network][collection].rules;
     return (
       rules.length === 0 ||
       rules.some((substring) => prompt.includes(substring))
@@ -253,6 +255,7 @@ export default function Mint() {
   const handleChangeModel = (selectedOption: any) => {
     setModel(selectedOption.value);
   };
+
   return (
     <>
       <div className="w-3/4 lg:w-[48rem] flex flex-col gap-4">
@@ -337,7 +340,7 @@ export default function Mint() {
       <div className="w-3/4 lg:w-[48rem] flex flex-col gap-4">
         <div className="flex flex-col gap-2 md:gap-4 items-center mb-3">
           <h1 className="text-2xl md:text-3xl text-center flex gap-4 items-center">
-            {collections[collection].name}{' '}
+            {collections[network][collection].name}{' '}
             <BsFillCheckCircleFill className="h-7 w-7 mt-1 text-green-400" />
           </h1>
           <p className="text-center text-zinc-300 w-full md:w-5/6 text-sm md:text-base">
@@ -346,7 +349,7 @@ export default function Mint() {
             API access you can try DreamStudio Beta. This is a collection of
             random generated images!
           </p>
-          {collections[collection].rules.length > 0 && (
+          {collections[network][collection].rules.length > 0 && (
             <div className="flex flex-col gap-2 border-4 border-zinc-800 w-full md:w-5/6 rounded-lg">
               <p
                 onClick={() => setViewRules(!viewRules)}
@@ -362,7 +365,7 @@ export default function Mint() {
                     words:
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    {collections[collection].rules.map((word) => (
+                    {collections[network][collection].rules.map((word) => (
                       <p
                         key={word}
                         className="py-2 px-4 bg-zinc-800 rounded-lg hover:bg-green-400 hover:text-black cursor-pointer"
@@ -448,11 +451,11 @@ export default function Mint() {
             <p className="text-xl font-semibold mt-2">Collection</p>
             <div className="flex items-center gap-5">
               <img
-                src={collections[collection].image}
+                src={collections[network][collection].image}
                 alt="generated image"
                 className="h-12 w-12 rounded-md"
               ></img>
-              <p>{collections[collection].name}</p>
+              <p>{collections[network][collection].name}</p>
             </div>
             <p className="font-semibold text-xl mt-3">Details</p>
             <div className="flex flex-col gap-2">
@@ -467,6 +470,12 @@ export default function Mint() {
               <div className="flex items-center justify-between">
                 <p className="font-semibold text-lg">Owned by</p>
                 <p className="text-lg text-gray-400">No one</p>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="font-semibold text-lg">Network</p>
+                <p className="text-lg text-gray-400">
+                  {network === 'mainnet' ? 'Tron mainnet' : 'Shasta testnet'}
+                </p>
               </div>
             </div>
             <button

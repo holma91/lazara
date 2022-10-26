@@ -2,7 +2,11 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { collectionToPromptToImage } from '../promptToImage';
 
-const indexToCollection = ['space', 'dogs', 'random'];
+const indexToCollection = [
+  'the-space-collection',
+  'the-dog-collection',
+  'the-random-collection',
+];
 
 export default function Home() {
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -27,7 +31,7 @@ export default function Home() {
     <div className="flex flex-col items-center pt-8 md:pt-16 bg-black text-white overflow-x-hidden">
       <div className="flex flex-col gap-6 items-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal  w-3/4 md:w-1/2 text-center ">
-          AI meets Crypto & NFTs. Available for everyone on Near & Aurora today.
+          AI meets Crypto & NFTs. Available for everyone on Tron today.
         </h1>
         <p className="text-base text-zinc-300 sm:text-lg md:text-xl font-light w-10/12 md:w-7/12 text-center">
           Create collections and generate images with State of the Art diffusion
@@ -115,7 +119,7 @@ export default function Home() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full lg:w-4/6 mt-5">
           <div className="flex flex-col items-center gap-2">
             <p className="text-xl md:text-2xl text-zinc-300">Blockchains</p>
-            <p className="text-2xl md:text-3xl font-bold text-green-400">2</p>
+            <p className="text-2xl md:text-3xl font-bold text-green-400">1</p>
           </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-xl md:text-2xl text-zinc-300">NFTs minted</p>
@@ -141,12 +145,16 @@ export default function Home() {
                   className="relative col-span-2 row-span-2 h-full w-full cursor-pointer group"
                 >
                   <img
-                    src={`/space/${i}.png`}
+                    src={`/the-space-collection/${i}.png`}
                     alt="generated image"
                     className="h-full w-full"
                   ></img>
                   <p className="absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
-                    {Object.keys(collectionToPromptToImage['space'])[i]}
+                    {
+                      Object.keys(
+                        collectionToPromptToImage['the-space-collection']
+                      )[i]
+                    }
                   </p>
                 </a>
               );
@@ -157,12 +165,16 @@ export default function Home() {
                 className="relative col-span-1 row-span-1 h-full w-full cursor-pointer group"
               >
                 <img
-                  src={`/space/${i}.png`}
+                  src={`/the-space-collection/${i}.png`}
                   alt="generated image"
                   className="h-full w-full"
                 ></img>
                 <p className=" absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
-                  {Object.keys(collectionToPromptToImage['space'])[i]}
+                  {
+                    Object.keys(
+                      collectionToPromptToImage['the-space-collection']
+                    )[i]
+                  }
                 </p>
               </a>
             );

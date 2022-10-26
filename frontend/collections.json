@@ -2,7 +2,6 @@
   "dogs": {
     "name": "The Dog Collection",
     "description": "Stable Diffusion is a state of the art text-to-image model that generates images from text. For faster generation and forthcoming API access you can try DreamStudio Beta. This is a collection of random generated images!",
-    "royalties": 0,
     "image": "/dogs/1.png",
     "rules": [
       "dog",

@@ -1,12 +1,3 @@
-
-
-when clicking generate:
-1. send request with model and prompt to the backend
-2. send the prompt to the model's API
-3. get image back
-4. send image to frontend
-
-
 when clicking mint:
 1. upload to ipfs
 2. mint on the chosen chain

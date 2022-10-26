@@ -1,7 +1,7 @@
 export const collectionToPromptToImage: {
   [key: string]: { [key: string]: number };
 } = {
-  space: {
+  'the-space-collection': {
     'planet, trending on artstation, stars and moon, 8k, cinematic composition': 0,
     'large space dreamscape with galaxies and swirling colors of space dust, exploding stars, black holes, planets': 1,
     'vertical, limit, galaxy, universe, emotion, uhd hyperrealistic photorealisitc hyperdetailed detailed, in space': 2,
@@ -17,7 +17,7 @@ export const collectionToPromptToImage: {
     'large scaling galaxy, intertwining bright colors, supernova, fire, collapsing into a black hole full of beautiful galaxies, bright hd ultra color, bright stars, space, bright': 12,
     'open your eyes to the cosmic rainbow cosmos, digital art, hyper detailed, vibrant, artstation, deep and dense coloration.': 13,
   },
-  dogs: {
+  'the-dog-collection': {
     'A polite shiba inu eating sushi in a Koma room, very beautiful, watercolor': 0,
     'cavapoo running on the beach, ocean, photorealistic': 1,
     'shiba inu sitting on times square': 2,

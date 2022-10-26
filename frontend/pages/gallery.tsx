@@ -12,12 +12,16 @@ export default function Gallery() {
                 className="relative col-span-2 row-span-2 h-full w-full cursor-pointer group"
               >
                 <img
-                  src={`/space/${i}.png`}
+                  src={`/the-space-collection/${i}.png`}
                   alt="generated image"
                   className="h-full w-full"
                 ></img>
                 <p className="absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
-                  {Object.keys(collectionToPromptToImage['space'])[i]}
+                  {
+                    Object.keys(
+                      collectionToPromptToImage['the-space-collection']
+                    )[i]
+                  }
                 </p>
               </a>
             );
@@ -28,12 +32,16 @@ export default function Gallery() {
               className="relative col-span-1 row-span-1 h-full w-full cursor-pointer group"
             >
               <img
-                src={`/space/${i}.png`}
+                src={`/the-space-collection/${i}.png`}
                 alt="generated image"
                 className="h-full w-full"
               ></img>
               <p className=" absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
-                {Object.keys(collectionToPromptToImage['space'])[i]}
+                {
+                  Object.keys(
+                    collectionToPromptToImage['the-space-collection']
+                  )[i]
+                }
               </p>
             </a>
           );
@@ -46,12 +54,16 @@ export default function Gallery() {
                 className="relative col-span-2 row-span-2 h-full w-full cursor-pointer group"
               >
                 <img
-                  src={`/dogs/${i}.png`}
+                  src={`/the-dog-collection/${i}.png`}
                   alt="generated image"
                   className="h-full w-full"
                 ></img>
                 <p className="absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
-                  {Object.keys(collectionToPromptToImage['dogs'])[i]}
+                  {
+                    Object.keys(
+                      collectionToPromptToImage['the-dog-collection']
+                    )[i]
+                  }
                 </p>
               </a>
             );
@@ -62,12 +74,16 @@ export default function Gallery() {
               className="relative col-span-1 row-span-1 h-full w-full cursor-pointer group"
             >
               <img
-                src={`/dogs/${i}.png`}
+                src={`/the-dog-collection/${i}.png`}
                 alt="generated image"
                 className="h-full w-full"
               ></img>
               <p className=" absolute left-0 bottom-0 text-lg p-4 backdrop-blur-lg invisible group-hover:visible">
-                {Object.keys(collectionToPromptToImage['dogs'])[i]}
+                {
+                  Object.keys(collectionToPromptToImage['the-dog-collection'])[
+                    i
+                  ]
+                }
               </p>
             </a>
           );

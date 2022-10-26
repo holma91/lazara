@@ -4,18 +4,10 @@ import { useForm } from 'react-hook-form';
 
 export const blockchains = [
   {
-    value: 'near-testnet',
+    value: 'shasta-testnet',
     label: (
       <div className="p-2 rounded-lg">
-        <span>Near Testnet</span>
-      </div>
-    ),
-  },
-  {
-    value: 'aurora-testnet',
-    label: (
-      <div className="p-2 rounded-lg">
-        <span>Aurora Testnet</span>
+        <span>Shasta Testnet</span>
       </div>
     ),
   },
