@@ -13,6 +13,9 @@ Collection:
     - word list
 
 
+TODO:
+- ipfs http client
+
 
 
 

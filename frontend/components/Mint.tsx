@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import * as ipfsClient from 'ipfs-http-client';
 import {
   FaHatCowboy,
   FaFrog,
@@ -15,7 +16,12 @@ import { MdAddCircle } from 'react-icons/md';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import Select from 'react-select';
 import { collections } from '../data/collections';
-import { NetworkContext } from '../pages/_app';
+import { NetworkContext, TronWebContext } from '../pages/_app';
+import {
+  ensureIpfsUriPrefix,
+  generateImageURI,
+  generateMetadataURI,
+} from '../helpers/ipfs';
 
 export const modelOptions = [
   {
@@ -158,6 +164,7 @@ const getImages = (collection: string): string[] => {
 
 export default function Mint() {
   const network = useContext(NetworkContext);
+  const tronWeb = useContext(TronWebContext);
   const [collection, setCollection] = useState('the-random-collection');
   const [model, setModel] = useState('stable-diffusion');
   const {
@@ -254,6 +261,27 @@ export default function Mint() {
 
   const handleChangeModel = (selectedOption: any) => {
     setModel(selectedOption.value);
+  };
+
+  const mintNft = async () => {
+    if (!tronWeb) return;
+
+    const creator = tronWeb.defaultAddress.base58;
+    const name = collections[network][collection].name + ' #' + 1;
+    const imageURI = await generateImageURI(generatedImage);
+    const metadataURI = await generateMetadataURI(
+      imageURI,
+      name,
+      generatedPrompt,
+      model,
+      creator
+    );
+    console.log(imageURI);
+    console.log(metadataURI);
+
+    // mint the nft
+    const chosenCollection = collections[network][collection];
+    console.log(chosenCollection.address);
   };
 
   return (
@@ -446,7 +474,9 @@ export default function Mint() {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h1 className="text-2xl font-semibold mt-5">{collection} #324</h1>
+            <h1 className="text-2xl font-semibold mt-5">
+              {collections[network][collection].name} #324
+            </h1>
             <p className="text-lg">{watch('prompt')}</p>
             <p className="text-xl font-semibold mt-2">Collection</p>
             <div className="flex items-center gap-5">
@@ -481,6 +511,7 @@ export default function Mint() {
             <button
               type="submit"
               className="mt-4 bg-green-400 text-black font-semibold px-4 py-3 rounded-md outline-none hover:bg-white"
+              onClick={mintNft}
             >
               Mint NFT
             </button>
