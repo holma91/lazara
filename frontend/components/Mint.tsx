@@ -184,6 +184,9 @@ export default function Mint() {
   const [isMinting, setIsMinting] = useState(false);
   const [mintingStatus, setMintingStatus] = useState('mint');
   const [nftLink, setNftLink] = useState('https://apenft.io');
+  const [bannerImages, setBannerImages] = useState(
+    collections['shasta']['the-space-collection'].banner
+  );
 
   const onSubmit = async ({ prompt }: any) => {
     if (prompt === 'test') {
@@ -267,10 +270,11 @@ export default function Mint() {
     collection: string,
     model: string
   ) => {
+    let lowerCasePrompt = prompt.toLowerCase();
     let rules = collections[network][collection].rules;
     return (
       rules.length === 0 ||
-      rules.some((substring) => prompt.includes(substring))
+      rules.some((substring) => lowerCasePrompt.includes(substring))
     );
   };
 
@@ -289,17 +293,19 @@ export default function Mint() {
     try {
       setMintingStatus('minting');
       const creator = tronWeb.defaultAddress.base58;
-      const name = collections[network][collection].name + ' #' + 1;
-      const imageURI = await generateImageURI(generatedImage);
+      const name = collections[network][collection].name + ' #' + nextTokenId;
+      const imageURI = await generateImageURI(generatedImage, true);
       const metadataURI = await generateMetadataURI(
         imageURI,
         name,
         generatedPrompt,
         model,
-        creator
+        creator,
+        true
       );
       console.log(imageURI);
       console.log(metadataURI);
+      // return;
 
       // mint the nft
       const chosenCollection = collections[network][collection];
@@ -351,6 +357,17 @@ export default function Mint() {
     getNextId();
   }, [collection, network, tronWeb]);
 
+  // if (network && collection) {
+  // bannerImages = collections[network][collection].banner;
+  // }
+
+  useEffect(() => {
+    if (!network || !collection) return;
+    setBannerImages(collections[network][collection].banner);
+  }, [network, collection]);
+
+  console.log(bannerImages);
+
   return (
     <>
       <div className="w-3/4 lg:w-[48rem] flex flex-col gap-4">
@@ -373,59 +390,88 @@ export default function Mint() {
       grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 3xl:grid-cols-9 my-5"
       >
         {[...Array(3)].map((_, i) => (
-          <a key={i} className="cursor-pointer">
+          <a
+            key={i}
+            href={bannerImages[i]?.nft}
+            target="_blank"
+            rel="noreferrer"
+            className="cursor-pointer"
+          >
             <img
-              src={`${collection}/${i}.png`}
+              src={bannerImages[i]?.image}
               alt="generated image"
               className="rounded-xl "
             ></img>
           </a>
         ))}
-        <a className="cursor-pointer hidden sm:block">
+        <a
+          className="cursor-pointer hidden sm:block"
+          href={bannerImages[3]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${3}.png`}
+            src={bannerImages[3]?.image}
             alt="generated image"
             className="rounded-xl "
           ></img>
         </a>
-        <a className="cursor-pointer hidden md:block">
+        <a
+          className="cursor-pointer hidden md:block"
+          href={bannerImages[4]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${4}.png`}
+            src={bannerImages[4]?.image}
             alt="generated image"
             className="rounded-xl "
           ></img>
         </a>
-        <a className="cursor-pointer hidden lg:block">
+        <a
+          className="cursor-pointer hidden lg:block"
+          href={bannerImages[5]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${5}.png`}
+            src={bannerImages[5]?.image}
             alt="generated image"
             className="rounded-xl "
           ></img>
         </a>
-        <a className="cursor-pointer hidden xl:block">
+        <a
+          className="cursor-pointer hidden xl:block"
+          href={bannerImages[6]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${6}.png`}
+            src={bannerImages[6]?.image}
             alt="generated image"
             className="rounded-xl "
           ></img>
         </a>
-        <a className="cursor-pointer hidden 2xl:block">
+        <a
+          className="cursor-pointer hidden 2xl:block"
+          href={bannerImages[0]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${7}.png`}
+            src={bannerImages[0]?.image}
             alt="generated image"
             className="rounded-xl "
           ></img>
         </a>
-        <a className="cursor-pointer hidden 3xl:block">
+        <a
+          className="cursor-pointer hidden 3xl:block"
+          href={bannerImages[1]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${8}.png`}
-            alt="generated image"
-            className="rounded-xl "
-          ></img>
-        </a>
-        <a className="cursor-pointer hidden 3xl:block">
-          <img
-            src={`${collection}/${9}.png`}
+            src={bannerImages[1]?.image}
             alt="generated image"
             className="rounded-xl "
           ></img>
@@ -578,15 +624,21 @@ export default function Mint() {
               </div>
             </div>
             {mintingStatus === 'minted' ? (
-              <a
-                className="mt-4 border border-green-400 text-green-400 flex justify-center items-center gap-2 font-semibold px-4 py-3 rounded-md outline-none hover:bg-green-400 hover:text-black cursor-pointer"
-                href={nftLink}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span>View on Apenft</span>
-                <FiExternalLink />
-              </a>
+              <>
+                <a
+                  className="mt-4 border border-green-400 text-green-400 flex justify-center items-center gap-2 font-semibold px-4 py-3 rounded-md outline-none hover:bg-green-400 hover:text-black cursor-pointer"
+                  href={nftLink}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span>View on Apenft</span>
+                  <FiExternalLink />
+                </a>
+                <p className="text-xs text-gray-400">
+                  * it will take a couple of minutes for apenft to index your
+                  nft
+                </p>
+              </>
             ) : mintingStatus === 'minting' ? (
               <button className="mt-4 bg-green-400 text-black font-semibold px-4 py-3 rounded-md outline-none hover:bg-white">
                 Minting...

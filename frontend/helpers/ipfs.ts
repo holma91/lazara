@@ -29,7 +29,10 @@ export function ensureIpfsUriPrefix(cidOrURI: any) {
   return uri;
 }
 
-export const generateImageURI = async (generatedImage: string) => {
+export const generateImageURI = async (
+  generatedImage: string,
+  infura: boolean
+) => {
   const response = await fetch(generatedImage);
   const imageBuffer = await response.arrayBuffer();
 
@@ -43,7 +46,10 @@ export const generateImageURI = async (generatedImage: string) => {
   });
 
   const { cid } = await ipfs.add(imageBuffer);
-  const imageURI = ensureIpfsUriPrefix(cid);
+  let imageURI = ensureIpfsUriPrefix(cid);
+  if (infura) {
+    imageURI = 'https://aigenerated.infura-ipfs.io/ipfs/' + imageURI.slice(7);
+  }
   return imageURI;
 };
 
@@ -52,7 +58,8 @@ export const generateMetadataURI = async (
   name: string,
   prompt: string,
   model: string,
-  creator: string
+  creator: string,
+  infura: boolean
 ) => {
   const metadata = {
     description: prompt,
@@ -84,7 +91,12 @@ export const generateMetadataURI = async (
     content: JSON.stringify(metadata),
   });
 
-  const metadataURI = ensureIpfsUriPrefix(metadataCid) + '/metadata.json';
+  let metadataURI = ensureIpfsUriPrefix(metadataCid) + '/metadata.json';
+
+  if (infura) {
+    metadataURI =
+      'https://aigenerated.infura-ipfs.io/ipfs/' + metadataURI.slice(7);
+  }
 
   return metadataURI;
 };

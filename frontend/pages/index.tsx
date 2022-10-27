@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { collectionToPromptToImage } from '../promptToImage';
+import { collections } from '../data/collections';
 
 const indexToCollection = [
   'the-space-collection',
