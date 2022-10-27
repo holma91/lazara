@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as ipfsClient from 'ipfs-http-client';
 import {
@@ -22,6 +22,7 @@ import {
   generateImageURI,
   generateMetadataURI,
 } from '../helpers/ipfs';
+import NFT from '../../contracts/out/NFT.sol/NFT.json';
 
 export const modelOptions = [
   {
@@ -178,7 +179,11 @@ export default function Mint() {
   const [progress, setProgress] = useState(0);
   const [generatedImage, setGeneratedImage] = useState('');
   const [generatedPrompt, setGeneratedPrompt] = useState('');
+  const [nextTokenId, setNextTokenId] = useState('0');
   const [viewRules, setViewRules] = useState(false);
+  const [isMinting, setIsMinting] = useState(false);
+  const [mintingStatus, setMintingStatus] = useState('mint');
+  const [nftLink, setNftLink] = useState('https://apenft.io');
 
   const onSubmit = async ({ prompt }: any) => {
     if (prompt === 'test') {
@@ -202,6 +207,7 @@ export default function Mint() {
 
     setGeneratedImage('');
     setGeneratedPrompt('');
+    setMintingStatus('mint');
 
     let result = { image: '', error: '' };
 
@@ -240,6 +246,20 @@ export default function Mint() {
     console.log(result);
     setGeneratedImage(result.image);
     setGeneratedPrompt(prompt);
+
+    try {
+      const chosenCollection = collections[network][collection];
+      console.log(chosenCollection.address);
+      const nftContract = await tronWeb.contract(
+        NFT.abi,
+        chosenCollection.address
+      );
+      const nextTokenID = await nftContract.tokenId().call();
+
+      setNextTokenId(nextTokenID.toString());
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const validatePrompt = (
@@ -257,6 +277,7 @@ export default function Mint() {
   const handleChangeCollection = (selectedOption: any) => {
     setGeneratedImage('');
     setCollection(selectedOption.value);
+    setMintingStatus('mint');
   };
 
   const handleChangeModel = (selectedOption: any) => {
@@ -264,25 +285,71 @@ export default function Mint() {
   };
 
   const mintNft = async () => {
-    if (!tronWeb) return;
+    if (!tronWeb || generatedImage === '') return;
+    try {
+      setMintingStatus('minting');
+      const creator = tronWeb.defaultAddress.base58;
+      const name = collections[network][collection].name + ' #' + 1;
+      const imageURI = await generateImageURI(generatedImage);
+      const metadataURI = await generateMetadataURI(
+        imageURI,
+        name,
+        generatedPrompt,
+        model,
+        creator
+      );
+      console.log(imageURI);
+      console.log(metadataURI);
 
-    const creator = tronWeb.defaultAddress.base58;
-    const name = collections[network][collection].name + ' #' + 1;
-    const imageURI = await generateImageURI(generatedImage);
-    const metadataURI = await generateMetadataURI(
-      imageURI,
-      name,
-      generatedPrompt,
-      model,
-      creator
-    );
-    console.log(imageURI);
-    console.log(metadataURI);
+      // mint the nft
+      const chosenCollection = collections[network][collection];
+      console.log(chosenCollection.address);
+      const nftContract = await tronWeb.contract(
+        NFT.abi,
+        chosenCollection.address
+      );
+      console.log(nftContract);
+      let id = await nftContract.mint(metadataURI).send({
+        shouldPollResponse: false,
+      });
+      console.log('id:', id);
+      console.log('id:', id.toString());
 
-    // mint the nft
-    const chosenCollection = collections[network][collection];
-    console.log(chosenCollection.address);
+      // address, date, creator, tokenId
+      setTimeout(() => {
+        setMintingStatus('minted');
+
+        setNftLink(
+          `https://${network === 'shasta' ? 'testnet.' : ''}apenft.io/assets/${
+            chosenCollection.address
+          }/${nextTokenId}`
+        );
+      }, 7500);
+    } catch (e) {
+      console.log(e);
+      setMintingStatus('mint');
+    }
   };
+
+  useEffect(() => {
+    if (!collection || !network || !tronWeb) return;
+    const getNextId = async () => {
+      try {
+        const chosenCollection = collections[network][collection];
+        console.log(chosenCollection.address);
+        const nftContract = await tronWeb.contract(
+          NFT.abi,
+          chosenCollection.address
+        );
+        const nextTokenID = await nftContract.tokenId().call();
+
+        setNextTokenId(nextTokenID.toString());
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getNextId();
+  }, [collection, network, tronWeb]);
 
   return (
     <>
@@ -468,14 +535,14 @@ export default function Mint() {
               <div className="flex flex-col gap-2 bg-zinc-800 rounded-md p-4">
                 <p className="text-sm">Creator</p>
                 <p className="text-xs md:text-sm overflow-x-scroll">
-                  0xdead...1337
+                  {tronWeb ? tronWeb.defaultAddress.base58 : '0x0'}
                 </p>
               </div>
             </div>
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-semibold mt-5">
-              {collections[network][collection].name} #324
+              {collections[network][collection].name} #{nextTokenId}
             </h1>
             <p className="text-lg">{watch('prompt')}</p>
             <p className="text-xl font-semibold mt-2">Collection</p>
@@ -490,16 +557,18 @@ export default function Mint() {
             <p className="font-semibold text-xl mt-3">Details</p>
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <p className="font-semibold text-lg">Royalties</p>
-                <p className="text-lg text-gray-400">5% goes to the creator</p>
-              </div>
-              <div className="flex items-center justify-between">
                 <p className="font-semibold text-lg">Minted</p>
-                <p className="text-lg text-gray-400">Not minted yet</p>
+                <p className="text-lg text-gray-400">
+                  {mintingStatus === 'minted'
+                    ? new Date().toISOString().split('T')[0]
+                    : 'Not minted yet'}
+                </p>
               </div>
               <div className="flex items-center justify-between">
                 <p className="font-semibold text-lg">Owned by</p>
-                <p className="text-lg text-gray-400">No one</p>
+                <p className="text-lg text-gray-400">
+                  {mintingStatus === 'minted' ? 'You' : 'No one'}
+                </p>
               </div>
               <div className="flex items-center justify-between">
                 <p className="font-semibold text-lg">Network</p>
@@ -508,13 +577,29 @@ export default function Mint() {
                 </p>
               </div>
             </div>
-            <button
-              type="submit"
-              className="mt-4 bg-green-400 text-black font-semibold px-4 py-3 rounded-md outline-none hover:bg-white"
-              onClick={mintNft}
-            >
-              Mint NFT
-            </button>
+            {mintingStatus === 'minted' ? (
+              <a
+                className="mt-4 border border-green-400 text-green-400 flex justify-center items-center gap-2 font-semibold px-4 py-3 rounded-md outline-none hover:bg-green-400 hover:text-black cursor-pointer"
+                href={nftLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>View on Apenft</span>
+                <FiExternalLink />
+              </a>
+            ) : mintingStatus === 'minting' ? (
+              <button className="mt-4 bg-green-400 text-black font-semibold px-4 py-3 rounded-md outline-none hover:bg-white">
+                Minting...
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="mt-4 bg-green-400 text-black font-semibold px-4 py-3 rounded-md outline-none hover:bg-white"
+                onClick={mintNft}
+              >
+                Mint NFT
+              </button>
+            )}
           </div>
         </div>
       </div>

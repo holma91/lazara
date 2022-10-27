@@ -1,6 +1,6 @@
 type Collection = {
   name: string;
-  address: '';
+  address: string;
   description: string;
   image: string;
   rules: string[];
@@ -82,7 +82,7 @@ export const collections: { [key: string]: { [key: string]: Collection } } = {
   },
   shasta: {
     'the-random-collection': {
-      address: '',
+      address: 'TUMnmUHfpRi1BkXCLSjjvfgSSVuNpa2HbZ',
       name: 'The Random Collection',
       description:
         'Stable Diffusion is a state of the art text-to-image model that generates images from text. For faster generation and forthcoming API access you can try DreamStudio Beta. This is a collection of random generated images!',
@@ -90,7 +90,7 @@ export const collections: { [key: string]: { [key: string]: Collection } } = {
       rules: [],
     },
     'the-dog-collection': {
-      address: '',
+      address: 'TUzzGSD8oVEon6GF6oetCMY9mJGpGFvrTG',
       name: 'The Dog Collection',
       description:
         'Stable Diffusion is a state of the art text-to-image model that generates images from text. For faster generation and forthcoming API access you can try DreamStudio Beta. This is a collection of random generated images!',
@@ -122,7 +122,7 @@ export const collections: { [key: string]: { [key: string]: Collection } } = {
       ],
     },
     'the-space-collection': {
-      address: '',
+      address: 'TNKfHCHDNARGnnvFioyWsXdqt6nN7V1kjf',
       name: 'The Space Collection',
       description:
         'Stable Diffusion is a state of the art text-to-image model that generates images from text. For faster generation and forthcoming API access you can try DreamStudio Beta. This is a collection of random generated images!',
@@ -147,7 +147,7 @@ export const collections: { [key: string]: { [key: string]: Collection } } = {
       ],
     },
     'the-walter-white-collection': {
-      address: '',
+      address: 'TH8TUYgytG9NjtiwA1sZ15FYRTJrJVukZf',
       name: 'The Walter White Collection',
       description:
         'Stable Diffusion is a state of the art text-to-image model that generates images from text. For faster generation and forthcoming API access you can try DreamStudio Beta. This is a collection of random generated images!',
