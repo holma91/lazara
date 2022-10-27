@@ -181,7 +181,6 @@ export default function Mint() {
   const [generatedPrompt, setGeneratedPrompt] = useState('');
   const [nextTokenId, setNextTokenId] = useState('0');
   const [viewRules, setViewRules] = useState(false);
-  const [isMinting, setIsMinting] = useState(false);
   const [mintingStatus, setMintingStatus] = useState('mint');
   const [nftLink, setNftLink] = useState('https://apenft.io');
   const [bannerImages, setBannerImages] = useState(
