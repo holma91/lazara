@@ -9,7 +9,7 @@ export default function Gallery() {
             return (
               <a
                 key={i}
-                className="relative col-span-2 row-span-2 h-full w-full cursor-pointer group"
+                className="relative col-span-2 row-span-2 h-full w-full group"
               >
                 <img
                   src={`/the-space-collection/${i}.png`}
@@ -29,7 +29,7 @@ export default function Gallery() {
           return (
             <a
               key={i}
-              className="relative col-span-1 row-span-1 h-full w-full cursor-pointer group"
+              className="relative col-span-1 row-span-1 h-full w-full group"
             >
               <img
                 src={`/the-space-collection/${i}.png`}

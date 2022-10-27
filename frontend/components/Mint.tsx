@@ -308,17 +308,14 @@ export default function Mint() {
 
       // mint the nft
       const chosenCollection = collections[network][collection];
-      console.log(chosenCollection.address);
       const nftContract = await tronWeb.contract(
         NFT.abi,
         chosenCollection.address
       );
-      console.log(nftContract);
+
       let id = await nftContract.mint(metadataURI).send({
         shouldPollResponse: false,
       });
-      console.log('id:', id);
-      console.log('id:', id.toString());
 
       // address, date, creator, tokenId
       setTimeout(() => {
@@ -341,7 +338,6 @@ export default function Mint() {
     const getNextId = async () => {
       try {
         const chosenCollection = collections[network][collection];
-        console.log(chosenCollection.address);
         const nftContract = await tronWeb.contract(
           NFT.abi,
           chosenCollection.address
@@ -364,8 +360,6 @@ export default function Mint() {
     if (!network || !collection) return;
     setBannerImages(collections[network][collection].banner);
   }, [network, collection]);
-
-  console.log(bannerImages);
 
   return (
     <>

@@ -6,6 +6,7 @@ import { collections } from '../data/collections';
 const indexToCollection = [
   'the-space-collection',
   'the-dog-collection',
+  'the-walter-white-collection',
   'the-random-collection',
 ];
 
@@ -13,15 +14,13 @@ export default function Home() {
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   const collection = indexToCollection[carouselIndex];
+  const bannerImages =
+    collections['mainnet'][indexToCollection[carouselIndex]].banner;
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCarouselIndex((prevIndex) => {
-        console.log(prevIndex);
-        console.log(prevIndex + 1);
-        console.log((prevIndex + 1) % 3);
-
-        return (prevIndex + 1) % 3;
+        return (prevIndex + 1) % 4;
       });
     }, 10000);
 
@@ -53,38 +52,64 @@ export default function Home() {
       </div>
       <div className="grid grid-cols-3 grid-rows-1 overflow-y-hidden md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 gap-3 mt-8 md:mt-12 mx-6">
         {[...Array(3)].map((_, i) => (
-          <a key={i + 100} className="cursor-pointer">
+          <a
+            key={i + 100}
+            className="cursor-pointer"
+            href={bannerImages[i]?.nft}
+            target="_blank"
+            rel="noreferrer"
+          >
             <img
-              src={`${collection}/${i}.png`}
+              src={bannerImages[i]?.image}
               alt="generated image"
               className="rounded-xl"
             ></img>
           </a>
         ))}
-        <a className="cursor-pointer hidden md:block">
+        <a
+          className="cursor-pointer hidden md:block"
+          href={bannerImages[4]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${4}.png`}
+            src={bannerImages[4]?.image}
             alt="generated image"
             className="rounded-xl"
           ></img>
         </a>
-        <a className="cursor-pointer hidden lg:block">
+        <a
+          className="cursor-pointer hidden lg:block"
+          href={bannerImages[5]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${5}.png`}
+            src={bannerImages[5]?.image}
             alt="generated image"
             className="rounded-xl"
           ></img>
         </a>
-        <a className="cursor-pointer hidden 2xl:block">
+        <a
+          className="cursor-pointer hidden 2xl:block"
+          href={bannerImages[6]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${6}.png`}
+            src={bannerImages[6]?.image}
             alt="generated image"
             className="rounded-xl"
           ></img>
         </a>
-        <a className="cursor-pointer hidden 3xl:block">
+        <a
+          className="cursor-pointer hidden 3xl:block"
+          href={bannerImages[7]?.nft}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img
-            src={`${collection}/${7}.png`}
+            src={bannerImages[7]?.image}
             alt="generated image"
             className="rounded-xl"
           ></img>
@@ -111,6 +136,14 @@ export default function Home() {
           className={
             'h-3 w-3 rounded-full ' +
             (carouselIndex === 2
+              ? 'bg-white'
+              : 'bg-black border-2 border-zinc-400')
+          }
+        ></div>
+        <div
+          className={
+            'h-3 w-3 rounded-full ' +
+            (carouselIndex === 3
               ? 'bg-white'
               : 'bg-black border-2 border-zinc-400')
           }
@@ -143,7 +176,7 @@ export default function Home() {
               return (
                 <a
                   key={i}
-                  className="relative col-span-2 row-span-2 h-full w-full cursor-pointer group"
+                  className="relative col-span-2 row-span-2 h-full w-full group"
                 >
                   <img
                     src={`/the-space-collection/${i}.png`}
@@ -163,7 +196,7 @@ export default function Home() {
             return (
               <a
                 key={i}
-                className="relative col-span-1 row-span-1 h-full w-full cursor-pointer group"
+                className="relative col-span-1 row-span-1 h-full w-full group"
               >
                 <img
                   src={`/the-space-collection/${i}.png`}
