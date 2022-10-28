@@ -269,10 +269,12 @@ export default function Create() {
                 onChange={handleChangeBlockchain}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-1 flex flex-col">
+              <p className="pb-2">*available soon</p>
               <button
                 type="submit"
-                className="bg-green-400 text-black text-base lg:text-lg font-semibold w-full h-11 rounded-md outline-none hover:bg-white"
+                className="bg-green-400 text-black text-base lg:text-lg font-semibold w-full h-11 rounded-md outline-none hover:bg-white cursor-not-allowed"
+                disabled
               >
                 Create collection
               </button>

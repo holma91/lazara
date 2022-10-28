@@ -6,3 +6,4 @@ next.config.js
 __pycache__
 discourse.js
 discourseHtmlDump.js
+Contracts/scripts

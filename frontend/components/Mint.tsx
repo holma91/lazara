@@ -179,6 +179,7 @@ export default function Mint() {
   const [progress, setProgress] = useState(0);
   const [generatedImage, setGeneratedImage] = useState('');
   const [generatedPrompt, setGeneratedPrompt] = useState('');
+  const [generateError, setGenerateError] = useState(false);
   const [nextTokenId, setNextTokenId] = useState('0');
   const [viewRules, setViewRules] = useState(false);
   const [mintingStatus, setMintingStatus] = useState('mint');
@@ -188,6 +189,7 @@ export default function Mint() {
   );
 
   const onSubmit = async ({ prompt }: any) => {
+    setGenerateError(false);
     if (prompt === 'test') {
       // setError('words', { type: 'custom', message: 'custom message' });
       setGeneratedImage('/generated/space1.png');
@@ -246,6 +248,14 @@ export default function Mint() {
     }
 
     console.log(result);
+
+    if (result.error) {
+      setGenerateError(true);
+      clearInterval(timer);
+      setProgress(0);
+      return;
+    }
+
     setGeneratedImage(result.image);
     setGeneratedPrompt(prompt);
 
@@ -553,7 +563,11 @@ export default function Mint() {
                   style={{ width: Math.floor(progress) + '%' }}
                 ></div>
                 <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg">
-                  {progress === 0 ? 'Ready!' : `${Math.floor(progress)}%`}
+                  {generateError
+                    ? 'Problem generating image. Try again!'
+                    : progress === 0
+                    ? 'Ready!'
+                    : `${Math.floor(progress)}%`}
                 </p>
               </div>
             ) : (
