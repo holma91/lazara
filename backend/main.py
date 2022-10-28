@@ -1,17 +1,20 @@
 from fastapi import FastAPI
+from typing import List, Union
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import replicate
+from dalle2 import Dalle2
 
 import os
 
 class Request(BaseModel):
     model: str
     prompt: str
+    outputs: int
     
 class Response(BaseModel):
-    image: str
+    images: List[str]
     error: str
     
 
@@ -30,8 +33,10 @@ app.add_middleware(
 )
 
 load_dotenv()
-API_TOKEN = os.getenv('REPLICATE_API_TOKEN')
-replicate_client = replicate.Client(api_token=API_TOKEN)
+REPLICATE_API_TOKEN = os.getenv('REPLICATE_API_TOKEN')
+OPENAI_API_TOKEN = os.getenv('OPENAI_API_TOKEN')
+replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
+dalle_client = Dalle2(OPENAI_API_TOKEN) 
 
 @app.get("/")
 async def root():
@@ -39,31 +44,28 @@ async def root():
 
 @app.post("/generate", response_model=Response)
 async def generate_image(request: Request):
-    image, error = "", ""
+    images, error = [], ""
     if request.model == "stable-diffusion":
         try:
-            image = stable_diffusion_generator(request.prompt)
+            images = stable_diffusion_generator(request.prompt, request.outputs)
         except Exception as e:
             print(e)
-            image = ""
-            error = "Couldn't generate image"
-    elif request.model == 'dall-e-2':
-        try:
-            image = dalle2_generator(request.prompt)
-        except Exception as e:
-            print(e)
-            image = ""
-            error = "Couldn't generate image"
+            images = []
+            error = "Couldn't generate images"
     else:
-        error = "Only support DALL-E 2 and Stable Diffusion"
+        error = "Only support Stable Diffusion at the moment."
 
-    return Response(image=image, error=error)
+    return Response(images=images, error=error)
 
 
-def stable_diffusion_generator(prompt: str):
+def stable_diffusion_generator(prompt: str, outputs: int):
     model = replicate_client.models.get("stability-ai/stable-diffusion")
-    result = model.predict(prompt=prompt)
-    return result[0]
+    result = model.predict(prompt=prompt, num_outputs=outputs)
+    return result
     
 def dalle2_generator(prompt: str):
-    return ""
+    tasks = dalle_client.generate(prompt)
+    results = []
+    for task in tasks:
+        results.append(task['generation']['image_path'])
+    return results

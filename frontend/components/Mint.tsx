@@ -24,6 +24,25 @@ import {
 } from '../helpers/ipfs';
 import NFT from '../../contracts/out/NFT.sol/NFT.json';
 
+export const imagesOptions = [
+  {
+    value: '1',
+    label: (
+      <div className="p-3 rounded-lg">
+        <span>1 image</span>
+      </div>
+    ),
+  },
+  {
+    value: '4',
+    label: (
+      <div className="p-3">
+        <span>4 images</span>
+      </div>
+    ),
+  },
+];
+
 export const modelOptions = [
   {
     value: 'stable-diffusion',
@@ -134,33 +153,10 @@ const customStyles = {
   }),
 };
 
-const getImages = (collection: string): string[] => {
-  if (collection === 'the-random-collection') {
-    return [
-      'dogs/1.png',
-      'space/1.png',
-      'space/2.png',
-      'space/3.png',
-      'dogs/3.png',
-      'generated/img3.png',
-      'dogs/4.png',
-      'space/5.png',
-      'space/6.png',
-      'space/7.png',
-      'space/8.png',
-      'space/9.png',
-      'dogs/9.png',
-      'dogs/10.png',
-      'dogs/11.png',
-    ];
-  }
-
-  const imgs = [];
-  for (let i = 0; i < 12; i++) {
-    imgs[i] = `${collection}/${i}.png`;
-  }
-
-  return imgs;
+const modelIdToModelName: { [key: string]: string } = {
+  'stable-diffusion': 'Stable Diffusion',
+  'dall-e-2': 'DALL-E 2',
+  imagen: 'Imagen',
 };
 
 export default function Mint() {
@@ -178,6 +174,8 @@ export default function Mint() {
   } = useForm();
   const [progress, setProgress] = useState(0);
   const [generatedImage, setGeneratedImage] = useState('');
+  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+  const [chosenIndex, setChosenIndex] = useState(0);
   const [generatedPrompt, setGeneratedPrompt] = useState('');
   const [generateError, setGenerateError] = useState(false);
   const [nextTokenId, setNextTokenId] = useState('0');
@@ -187,12 +185,13 @@ export default function Mint() {
   const [bannerImages, setBannerImages] = useState(
     collections['shasta']['the-space-collection'].banner
   );
+  const [numberOfImages, setNumberOfImages] = useState<'1' | '4'>('1');
 
   const onSubmit = async ({ prompt }: any) => {
     setGenerateError(false);
     if (prompt === 'test') {
       // setError('words', { type: 'custom', message: 'custom message' });
-      setGeneratedImage('/generated/space1.png');
+      setGeneratedImages(['/generated/space1.png']);
       setGeneratedPrompt('test prompt');
       return;
     }
@@ -209,16 +208,20 @@ export default function Mint() {
       return;
     }
 
-    setGeneratedImage('');
+    // setGeneratedImage('');
+    setGeneratedImages([]);
+    setChosenIndex(0);
     setGeneratedPrompt('');
     setMintingStatus('mint');
 
-    let result = { image: '', error: '' };
+    let result = { images: [], error: '' };
+
+    const x = numberOfImages === '1' ? 75 : 140;
 
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress === 90) {
-          if (result.image === '') {
+          if (result.images.length === 0) {
             let progresses = [70, 75, 80];
             oldProgress = progresses[Math.floor(Math.random() * 3)];
           }
@@ -227,9 +230,10 @@ export default function Mint() {
           clearInterval(timer);
           return 0;
         }
+
         return oldProgress + 1;
       });
-    }, 75);
+    }, x);
 
     try {
       const response = await fetch('http://localhost:8000/generate', {
@@ -240,6 +244,7 @@ export default function Mint() {
         body: JSON.stringify({
           model,
           prompt,
+          outputs: numberOfImages,
         }),
       });
       result = await response.json();
@@ -256,7 +261,8 @@ export default function Mint() {
       return;
     }
 
-    setGeneratedImage(result.image);
+    // setGeneratedImage(result.images[0]);
+    setGeneratedImages(result.images);
     setGeneratedPrompt(prompt);
 
     try {
@@ -288,7 +294,8 @@ export default function Mint() {
   };
 
   const handleChangeCollection = (selectedOption: any) => {
-    setGeneratedImage('');
+    setChosenIndex(0);
+    setGeneratedImages([]);
     setCollection(selectedOption.value);
     setMintingStatus('mint');
   };
@@ -297,8 +304,13 @@ export default function Mint() {
     setModel(selectedOption.value);
   };
 
+  const handleChangeNumberOfImages = (selectedOption: any) => {
+    setNumberOfImages(selectedOption.value);
+  };
+
   const mintNft = async () => {
-    if (!tronWeb || generatedImage === '') return;
+    if (!tronWeb || generatedImages.length === 0) return;
+    const generatedImage = generatedImages[chosenIndex];
     try {
       setMintingStatus('minting');
       const creator = tronWeb.defaultAddress.base58;
@@ -308,7 +320,7 @@ export default function Mint() {
         imageURI,
         name,
         generatedPrompt,
-        model,
+        'Stable Diffusion',
         creator,
         true
       );
@@ -523,25 +535,50 @@ export default function Mint() {
             </div>
           )}
         </div>
-        <Select
-          className="w-full"
-          defaultValue={{
-            label: modelOptions[0].label,
-            value: modelOptions[0].value,
-          }}
-          options={modelOptions}
-          styles={customStyles}
-          onChange={handleChangeModel}
-        />
+        <div>
+          <div className="flex gap-2">
+            <Select
+              className="w-2/3"
+              defaultValue={{
+                label: modelOptions[0].label,
+                value: modelOptions[0].value,
+              }}
+              options={modelOptions}
+              styles={customStyles}
+              onChange={handleChangeModel}
+            />
+            <Select
+              className="w-1/3"
+              defaultValue={{
+                label: imagesOptions[0].label,
+                value: imagesOptions[0].value,
+              }}
+              options={imagesOptions}
+              styles={customStyles}
+              onChange={handleChangeNumberOfImages}
+            />
+          </div>
+
+          {model !== 'stable-diffusion' && (
+            <p className="px-2 py-2 text-red-400">
+              Unfortunately, we don&apos;t support {modelIdToModelName[model]}{' '}
+              at the moment.
+            </p>
+          )}
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            className="bg-zinc-800 lg:text-lg px-4 py-3 w-4/6 md:w-4/6 lg:w-4/5 rounded-l-md outline-none mb-2"
+            className="bg-zinc-800 lg:text-lg px-4 py-3.5 w-4/6 md:w-4/6 lg:w-4/5 rounded-l-md outline-none mb-2"
             placeholder="Enter your prompt..."
             {...register('prompt', { required: true })}
           />
           <button
             type="submit"
-            className="bg-green-400 text-black text-base lg:text-lg font-semibold px-4 py-3 w-2/6 md:w-2/6 lg:w-1/5 rounded-r-md outline-none hover:bg-white"
+            className={
+              'bg-green-400 text-black text-base lg:text-lg font-semibold px-4 py-[0.85rem] w-2/6 md:w-2/6 lg:w-1/5 rounded-r-md outline-none hover:bg-white ' +
+              (model !== 'stable-diffusion' ? 'cursor-not-allowed' : '')
+            }
+            disabled={model !== 'stable-diffusion'}
           >
             Generate
           </button>
@@ -556,7 +593,7 @@ export default function Mint() {
         </form>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-12 mt-3">
           <div className="flex flex-col gap-4">
-            {generatedImage === '' || progress !== 0 ? (
+            {generatedImages.length === 0 || progress !== 0 ? (
               <div className="relative mb-4 w-full h-64 md:h-80 bg-zinc-900 rounded-lg ">
                 <div
                   className="h-64 md:h-80 bg-zinc-800 rounded-lg"
@@ -571,11 +608,33 @@ export default function Mint() {
                 </p>
               </div>
             ) : (
-              <img
-                src={`${generatedImage}`}
-                alt="generated image"
-                className="h-64 md:h-80 rounded-lg"
-              ></img>
+              <div className="flex flex-col gap-4">
+                <img
+                  src={`${generatedImages[chosenIndex]}`}
+                  alt="generated image"
+                  className="h-64 md:h-80 rounded-lg"
+                ></img>
+                <div className="flex gap-1 justify-center">
+                  {generatedImages &&
+                    generatedImages.length > 1 &&
+                    generatedImages?.map((image, i) => {
+                      return (
+                        <img
+                          key={image}
+                          onClick={() => setChosenIndex(i)}
+                          src={`${image}`}
+                          alt="generated image"
+                          className={
+                            'h-8 md:h-12 cursor-pointer rounded-lg border-2 ' +
+                            (i === chosenIndex
+                              ? 'border-green-400'
+                              : 'border-black')
+                          }
+                        ></img>
+                      );
+                    })}
+                </div>
+              </div>
             )}
 
             <div className="grid grid-cols-2 gap-4 font-semibold">
