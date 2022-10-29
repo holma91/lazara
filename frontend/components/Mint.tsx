@@ -236,7 +236,7 @@ export default function Mint() {
     }, x);
 
     try {
-      const response = await fetch('http://localhost:8001/generate', {
+      const response = await fetch(`${process.env.api}/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
