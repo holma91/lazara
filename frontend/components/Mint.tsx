@@ -236,7 +236,7 @@ export default function Mint() {
     }, x);
 
     try {
-      const response = await fetch('http://localhost:8000/generate', {
+      const response = await fetch('http://localhost:8001/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -250,6 +250,7 @@ export default function Mint() {
       result = await response.json();
     } catch (e) {
       console.log(e);
+      result.error = 'connection error';
     }
 
     console.log(result);

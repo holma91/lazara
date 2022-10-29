@@ -58,9 +58,11 @@ const customStyles = {
 };
 
 export default function Create() {
-  const [generatedImage, setGeneratedImage] = useState('');
   const [progress, setProgress] = useState(0);
-  const [blockchain, setBlockchain] = useState('near-testnet');
+  const [blockchain, setBlockchain] = useState('shasta-testnet');
+  const [generateError, setGenerateError] = useState(false);
+  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+
   const {
     register: registerGenerate,
     handleSubmit: handleGenerate,
@@ -73,14 +75,14 @@ export default function Create() {
   } = useForm();
 
   const onSubmitGenerate = async ({ prompt }: any) => {
-    setGeneratedImage('');
+    setGeneratedImages([]);
 
-    let result = { image: '', error: '' };
+    let result = { images: [], error: '' };
 
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress === 90) {
-          if (result.image === '') {
+          if (result.images.length === 0) {
             let progresses = [70, 75, 80];
             oldProgress = progresses[Math.floor(Math.random() * 3)];
           }
@@ -102,15 +104,24 @@ export default function Create() {
         body: JSON.stringify({
           model: 'stable-diffusion',
           prompt,
+          outputs: 1,
         }),
       });
       result = await response.json();
     } catch (e) {
       console.log(e);
+      result.error = 'connection error';
+    }
+
+    if (result.error) {
+      setGenerateError(true);
+      clearInterval(timer);
+      setProgress(0);
+      return;
     }
 
     console.log(result);
-    setGeneratedImage(result.image);
+    setGeneratedImages(result.images);
   };
 
   const onSubmitCreate = async (data: any) => {
@@ -124,27 +135,29 @@ export default function Create() {
   return (
     <div className="flex flex-col gap-4 justify-center items-center mb-10">
       <div className="lg:w-[27rem]">
-        {generatedImage === '' || progress !== 0 ? (
+        {(generatedImages && generatedImages.length === 0) || progress !== 0 ? (
           <div className="relative bg-zinc-900 rounded-lg w-[27rem] h-[27rem]">
             <div
               className="h-[27rem] bg-zinc-800 rounded-lg"
               style={{ width: Math.floor(progress) + '%' }}
             ></div>
             <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg">
-              {progress === 0
+              {generateError
+                ? 'Problem generating image. Try again!'
+                : progress === 0
                 ? 'Ready to generate image!'
                 : `${Math.floor(progress)}%`}
             </p>
           </div>
-        ) : (
+        ) : generatedImages && generatedImages.length > 0 ? (
           <div className="relative bg-zinc-900 rounded-lg w-[27rem] h-[27rem]">
             <img
-              src={generatedImage}
+              src={generatedImages[0]}
               alt="generated image"
               className=" rounded-lg"
             ></img>
           </div>
-        )}
+        ) : null}
       </div>
       <div className="w-3/4 lg:w-[48rem] flex flex-col gap-4">
         <label className="text-xl ">Collection Image</label>
