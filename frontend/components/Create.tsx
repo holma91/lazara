@@ -96,7 +96,7 @@ export default function Create() {
     }, 75);
 
     try {
-      const response = await fetch(`${process.env.api}/generate`, {
+      const response = await fetch(`${process.env.api_key}/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
