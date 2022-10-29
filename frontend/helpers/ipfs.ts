@@ -1,10 +1,5 @@
 import * as ipfsClient from 'ipfs-http-client';
 
-const ipfsAddOptions = {
-  cidVersion: 1,
-  hashAlg: 'sha2-256',
-};
-
 const models: { [key: string]: string } = {
   'stable-diffusion': 'Stable Diffusion',
   'dall-e-2': 'DALL-E 2',

@@ -4,6 +4,8 @@ env
 next.config.js
 .DS_Store
 __pycache__
-discourse.js
-discourseHtmlDump.js
+lol.js
+lol2.js
 Contracts/scripts
+forum.md
+devpost.md
