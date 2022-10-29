@@ -236,23 +236,29 @@ export default function Mint() {
     }, x);
 
     try {
-      console.log('process.env.ipfsProjectId =', process.env.ipfsProjectId);
-      console.log('process.env.api_key =', process.env.api_key);
+      console.log(
+        'process.env.ipfsProjectId =',
+        process.env.NEXT_PUBLIC_ipfsProjectId
+      );
+      console.log('process.env.api_key =', process.env.NEXT_PUBLIC_api_key);
       console.log(
         '`${process.env.api_key}/generate` =',
-        `${process.env.api_key}/generate`
+        `${process.env.NEXT_PUBLIC_api_key}/generate`
       );
-      const response = await fetch(`${process.env.api_key}/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          prompt,
-          outputs: numberOfImages,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_api_key}/generate`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model,
+            prompt,
+            outputs: numberOfImages,
+          }),
+        }
+      );
       result = await response.json();
     } catch (e) {
       console.log(e);

@@ -9,7 +9,9 @@ const models: { [key: string]: string } = {
 const auth =
   'Basic ' +
   Buffer.from(
-    process.env.ipfsProjectId + ':' + process.env.ipfsProjectSecret
+    process.env.NEXT_PUBLIC_ipfsProjectId +
+      ':' +
+      process.env.NEXT_PUBLIC_ipfsProjectSecret
   ).toString('base64');
 
 export function ensureIpfsUriPrefix(cidOrURI: any) {
