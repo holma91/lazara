@@ -65,7 +65,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="AI generated NFTs"
           content="AI generated NFTs on the Tron blockchain"
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/the-random-collection/0.png" />
       </Head>
       <TronWebContext.Provider value={tronWeb}>
         <ConnectedContext.Provider value={{ connected, setConnected }}>

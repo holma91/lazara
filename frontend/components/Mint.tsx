@@ -500,10 +500,7 @@ export default function Mint() {
             <BsFillCheckCircleFill className="h-7 w-7 mt-1 text-green-400" />
           </h1>
           <p className="text-center text-zinc-300 w-full md:w-5/6 text-sm md:text-base">
-            Stable Diffusion is a state of the art text-to-image model that
-            generates images from text. For faster generation and forthcoming
-            API access you can try DreamStudio Beta. This is a collection of
-            random generated images!
+            {collections[network][collection].description}{' '}
           </p>
           {collections[network][collection].rules.length > 0 && (
             <div className="flex flex-col gap-2 border-4 border-zinc-800 w-full md:w-5/6 rounded-lg">

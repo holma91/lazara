@@ -22,7 +22,7 @@ export default function Home() {
       setCarouselIndex((prevIndex) => {
         return (prevIndex + 1) % 4;
       });
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -161,11 +161,11 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-xl md:text-2xl text-zinc-300">Collections</p>
-            <p className="text-2xl md:text-3xl font-bold text-green-400">5</p>
+            <p className="text-2xl md:text-3xl font-bold text-green-400">4</p>
           </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-xl md:text-2xl text-zinc-300">Models</p>
-            <p className="text-2xl md:text-3xl font-bold text-green-400">2</p>
+            <p className="text-2xl md:text-3xl font-bold text-green-400">1</p>
           </div>
         </div>
       </div>
