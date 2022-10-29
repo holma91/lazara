@@ -236,6 +236,12 @@ export default function Mint() {
     }, x);
 
     try {
+      console.log('process.env.ipfsProjectId =', process.env.ipfsProjectId);
+      console.log('process.env.api_key =', process.env.api_key);
+      console.log(
+        '`${process.env.api_key}/generate` =',
+        `${process.env.api_key}/generate`
+      );
       const response = await fetch(`${process.env.api_key}/generate`, {
         method: 'POST',
         headers: {
