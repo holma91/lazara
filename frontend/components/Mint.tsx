@@ -236,15 +236,6 @@ export default function Mint() {
     }, x);
 
     try {
-      console.log(
-        'process.env.ipfsProjectId =',
-        process.env.NEXT_PUBLIC_ipfsProjectId
-      );
-      console.log('process.env.api_key =', process.env.NEXT_PUBLIC_api_key);
-      console.log(
-        '`${process.env.api_key}/generate` =',
-        `${process.env.NEXT_PUBLIC_api_key}/generate`
-      );
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_api_key}/generate`,
         {
@@ -280,7 +271,6 @@ export default function Mint() {
 
     try {
       const chosenCollection = collections[network][collection];
-      console.log(chosenCollection.address);
       const nftContract = await tronWeb.contract(
         NFT.abi,
         chosenCollection.address
@@ -337,11 +327,7 @@ export default function Mint() {
         creator,
         true
       );
-      console.log(imageURI);
-      console.log(metadataURI);
-      // return;
 
-      // mint the nft
       const chosenCollection = collections[network][collection];
       const nftContract = await tronWeb.contract(
         NFT.abi,
