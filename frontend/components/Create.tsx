@@ -96,17 +96,20 @@ export default function Create() {
     }, 75);
 
     try {
-      const response = await fetch(`${process.env.api_key}/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'stable-diffusion',
-          prompt,
-          outputs: 1,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_api_key}/generate`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'stable-diffusion',
+            prompt,
+            outputs: 1,
+          }),
+        }
+      );
       result = await response.json();
     } catch (e) {
       console.log(e);
